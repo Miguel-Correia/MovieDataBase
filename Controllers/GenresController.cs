@@ -10,22 +10,22 @@ using MovieDataBase.Models;
 
 namespace MovieDataBase.Controllers
 {
-    public class MoviesController : Controller
+    public class GenresController : Controller
     {
         private readonly MovieDataBaseContext _context;
 
-        public MoviesController(MovieDataBaseContext context)
+        public GenresController(MovieDataBaseContext context)
         {
             _context = context;
         }
 
-        // GET: Movies
+        // GET: Genres
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Movies.ToListAsync());
+            return View(await _context.Genre.ToListAsync());
         }
 
-        // GET: Movies/Details/5
+        // GET: Genres/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -33,39 +33,40 @@ namespace MovieDataBase.Controllers
                 return NotFound();
             }
 
-            var movie = await _context.Movies
+            var genre = await _context.Genre
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (movie == null)
+            if (genre == null)
             {
                 return NotFound();
             }
 
-            return View(movie);
+            return View(genre);
         }
 
-        // GET: Movies/Create
+        // GET: Genres/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Movies/Create
+        // POST: Genres/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Movies movie)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description")] Genre genre)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(movie);
+                genre.Id = Guid.NewGuid();
+                _context.Add(genre);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(movie);
+            return View(genre);
         }
 
-        // GET: Movies/Edit/5
+        // GET: Genres/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -73,22 +74,22 @@ namespace MovieDataBase.Controllers
                 return NotFound();
             }
 
-            var movie = await _context.Movies.FindAsync(id);
-            if (movie == null)
+            var genre = await _context.Genre.FindAsync(id);
+            if (genre == null)
             {
                 return NotFound();
             }
-            return View(movie);
+            return View(genre);
         }
 
-        // POST: Movies/Edit/5
+        // POST: Genres/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, Movies movie)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,Description")] Genre genre)
         {
-            if (id != movie.Id)
+            if (id != genre.Id)
             {
                 return NotFound();
             }
@@ -97,12 +98,12 @@ namespace MovieDataBase.Controllers
             {
                 try
                 {
-                    _context.Update(movie);
+                    _context.Update(genre);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MovieExists(movie.Id))
+                    if (!GenreExists(genre.Id))
                     {
                         return NotFound();
                     }
@@ -113,10 +114,10 @@ namespace MovieDataBase.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(movie);
+            return View(genre);
         }
 
-        // GET: Movies/Delete/5
+        // GET: Genres/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -124,34 +125,34 @@ namespace MovieDataBase.Controllers
                 return NotFound();
             }
 
-            var movie = await _context.Movies
+            var genre = await _context.Genre
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (movie == null)
+            if (genre == null)
             {
                 return NotFound();
             }
 
-            return View(movie);
+            return View(genre);
         }
 
-        // POST: Movies/Delete/5
+        // POST: Genres/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var movie = await _context.Movies.FindAsync(id);
-            if (movie != null)
+            var genre = await _context.Genre.FindAsync(id);
+            if (genre != null)
             {
-                _context.Movies.Remove(movie);
+                _context.Genre.Remove(genre);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool MovieExists(Guid id)
+        private bool GenreExists(Guid id)
         {
-            return _context.Movies.Any(e => e.Id == id);
+            return _context.Genre.Any(e => e.Id == id);
         }
     }
 }

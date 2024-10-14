@@ -21,6 +21,15 @@
             <th>
                 @Html.DisplayNameFor(model => model.DateReleased)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CritiqueScore)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ContentRating)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Runtime)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -34,7 +43,16 @@
                 @Html.DisplayFor(modelItem => item.Director)
             </td>
             <td>
-                    @Html.DisplayFor(modelItem => item.DateReleased)
+                @Html.DisplayFor(modelItem => item.DateReleased)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CritiqueScore)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ContentRating)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Runtime)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

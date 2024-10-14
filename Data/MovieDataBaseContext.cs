@@ -15,5 +15,6 @@ namespace MovieDataBase.Data
         }
 
         public DbSet<MovieDataBase.Models.Movies> Movies { get; set; } = default!;
+        public DbSet<MovieDataBase.Models.Genre> Genre { get; set; } = default!;
     }
 }
