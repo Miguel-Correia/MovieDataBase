@@ -14,7 +14,23 @@ namespace MovieDataBase.Data
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<MovieGenres>().HasKey(mg => new
+            {
+                mg.MovieId,
+                mg.GenreId
+            });
+
+            modelBuilder.Entity<MovieGenres>().HasOne(mg => mg.Movie).WithMany(mg => mg.MovieGenres).HasForeignKey(mg => mg.MovieId);
+            modelBuilder.Entity<MovieGenres>().HasOne(mg => mg.Genre).WithMany(mg => mg.MovieGenres).HasForeignKey(mg => mg.GenreId);
+
+            base.OnModelCreating(modelBuilder);
+        }
+
         public DbSet<MovieDataBase.Models.Movies> Movies { get; set; } = default!;
         public DbSet<MovieDataBase.Models.Genre> Genre { get; set; } = default!;
+        public DbSet<MovieGenres> MovieGenres { get; set; } = default!;
+        public DbSet<MovieImages> MovieImages { get; set; }
     }
 }

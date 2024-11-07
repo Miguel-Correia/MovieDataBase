@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -6,7 +7,7 @@ namespace MovieDataBase.Models
 {
     public class Movies
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string? Title { get; set; }
         public string? Director { get; set; }
 
@@ -18,6 +19,8 @@ namespace MovieDataBase.Models
         public int? Runtime { get; set; }
         public string? ContentRating { get; set; }
         public int? CritiqueScore { get; set; }
-        public virtual ICollection<Genre>? Genres { get; set; }
+        [Display(Name = "Genres")]
+        public List<MovieGenres>? MovieGenres { get; set; }
+        public List<MovieImages>? Images { get; set; }
     }
 }

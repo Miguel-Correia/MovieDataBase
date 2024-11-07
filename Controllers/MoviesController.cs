@@ -22,11 +22,14 @@ namespace MovieDataBase.Controllers
         // GET: Movies
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Movies.ToListAsync());
+            return View(await _context.Movies.Include(i => i.Images)
+                                                .Include(g => g.MovieGenres)
+                                                .ThenInclude(mg => mg.Genre)
+                                                .ToListAsync());
         }
 
         // GET: Movies/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -86,7 +89,7 @@ namespace MovieDataBase.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, Movies movie)
+        public async Task<IActionResult> Edit(int id, Movies movie)
         {
             if (id != movie.Id)
             {
@@ -117,7 +120,7 @@ namespace MovieDataBase.Controllers
         }
 
         // GET: Movies/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -149,7 +152,7 @@ namespace MovieDataBase.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool MovieExists(Guid id)
+        private bool MovieExists(int id)
         {
             return _context.Movies.Any(e => e.Id == id);
         }

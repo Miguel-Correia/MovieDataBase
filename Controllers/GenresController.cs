@@ -26,7 +26,7 @@ namespace MovieDataBase.Controllers
         }
 
         // GET: Genres/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -54,11 +54,10 @@ namespace MovieDataBase.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description")] Genre genre)
+        public async Task<IActionResult> Create(Genre genre)
         {
             if (ModelState.IsValid)
             {
-                genre.Id = Guid.NewGuid();
                 _context.Add(genre);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -87,7 +86,7 @@ namespace MovieDataBase.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,Description")] Genre genre)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description")] Genre genre)
         {
             if (id != genre.Id)
             {
@@ -118,7 +117,7 @@ namespace MovieDataBase.Controllers
         }
 
         // GET: Genres/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -150,7 +149,7 @@ namespace MovieDataBase.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool GenreExists(Guid id)
+        private bool GenreExists(int id)
         {
             return _context.Genre.Any(e => e.Id == id);
         }
