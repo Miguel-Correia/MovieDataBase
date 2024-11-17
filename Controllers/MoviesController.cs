@@ -51,7 +51,7 @@ namespace MovieDataBase.Controllers
         // GET: Movies/Create
         public IActionResult Create()
         {
-            PopulateGenresDropDownList();
+            PopulateGenresCheckboxes();
             return View();
         }
 
@@ -82,13 +82,20 @@ namespace MovieDataBase.Controllers
                 return NotFound();
             }
 
-            PopulateGenresDropDownList();
 
-            var movie = await _context.Movies.FindAsync(id);
+            var movie = await _context.Movies
+                .Include(mg => mg.MovieGenres)
+                .ThenInclude(g => g.Genre)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
             if (movie == null)
             {
                 return NotFound();
             }
+
+            PopulateGenresCheckboxes(movie);
+
+
             return View(movie);
         }
 
@@ -97,14 +104,19 @@ namespace MovieDataBase.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Movies movie, int[] selectedGenres)
+        public async Task<IActionResult> Edit(int id, int[] selectedGenres)
         {
-            if (id != movie.Id)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            var movie = await _context.Movies
+                .Include(mg => mg.MovieGenres)
+                .ThenInclude(g => g.Genre)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (ModelState.IsValid && movie != null)
             {
                 try
                 {
@@ -167,39 +179,96 @@ namespace MovieDataBase.Controllers
             return _context.Movies.Any(e => e.Id == id);
         }
 
-        private void PopulateGenresDropDownList(object selectedGenre = null)
+        //private void PopulateGenresDropDownList(object selectedGenre = null)
+        //{
+        //    var GenreQuery = from d in _context.Genre
+        //                           orderby d.Name
+        //                           select d;
+        //    ViewBag.Genres = new SelectList(GenreQuery.AsNoTracking(), "Id", "Name", selectedGenre);
+        //}
+
+        private void PopulateGenresCheckboxes(Movies? movie = null)
         {
-            var GenreQuery = from d in _context.Genre
-                                   orderby d.Name
-                                   select d;
-            ViewBag.Genres = new SelectList(GenreQuery.AsNoTracking(), "Id", "Name", selectedGenre);
+            var allGenres = _context.Genre;
+            var selectedMovieGenres = new HashSet<int>();
+            
+            if ( movie != null && movie.MovieGenres != null)
+                selectedMovieGenres = new HashSet<int>(movie.MovieGenres.Select(g => g.GenreId));
+
+            var viewModel = new List<MovieGenreData>();
+
+            foreach (var genre in allGenres) 
+            {
+                viewModel.Add(new MovieGenreData
+                {
+                    GenreId = genre.Id,
+                    GenreName = genre.Name != null ? genre.Name : "",
+                    Selected = selectedMovieGenres.Contains(genre.Id)
+                });
+            }
+            ViewBag.Genres = viewModel;
         }
+
 
         private void UpdateMovieGenres(int[] selectedGenres, Movies movie)
         {
-            movie.MovieGenres = new List<MovieGenres>();
-
-            if (selectedGenres == null)
-                return;
-
-            MovieGenres mg = null;
-            Genre g = null;
-            for(int i = 0; i < selectedGenres.Length; i++)
+            if (selectedGenres == null || movie.MovieGenres == null)
             {
-                mg = new MovieGenres();
-                g = _context.Genre.Find(selectedGenres[i]);
-                if (g != null)
-                {
-                    mg.Genre = g;
-                    mg.GenreId = selectedGenres[i];
-                    mg.MovieId = movie.Id;
-                    mg.Movie = movie;
+                movie.MovieGenres = new List<MovieGenres>();
+            }
 
-                    movie.MovieGenres.Add(mg);
+            var selectedGenresHS = new HashSet<int>(selectedGenres);
+            var movieGenres = new HashSet<int>(movie.MovieGenres.Select(mg => mg.GenreId));
+
+            foreach (var genre in _context.Genre)
+            {
+                if (selectedGenresHS.Contains(genre.Id))
+                {
+                    if (!movieGenres.Contains(genre.Id))
+                    {
+                        movie.MovieGenres.Add(new MovieGenres { GenreId = genre.Id, Genre = genre, Movie = movie, MovieId = movie.Id });
+                    }
+                }
+                else
+                {
+                    if (movieGenres.Contains(genre.Id))
+                    {
+                        MovieGenres genreToRemove = movie.MovieGenres.FirstOrDefault(mg => mg.GenreId == genre.Id);
+                        _context.Remove(genreToRemove);
+                    }
                 }
             }
 
+            //movie.MovieGenres = new List<MovieGenres>();
+
+            //if (selectedGenres == null)
+            //    return;
+
+            //MovieGenres mg = null;
+            //Genre g = null;
+            //for(int i = 0; i < selectedGenres.Length; i++)
+            //{
+            //    mg = new MovieGenres();
+            //    g = _context.Genre.Find(selectedGenres[i]);
+            //    if (g != null)
+            //    {
+            //        mg.Genre = g;
+            //        mg.GenreId = selectedGenres[i];
+            //        mg.MovieId = movie.Id;
+            //        mg.Movie = movie;
+
+            //        movie.MovieGenres.Add(mg);
+            //    }
+            //}
+
         }
 
+    }
+
+    public class MovieGenreData
+    {
+        public int GenreId { get; set; }
+        public string? GenreName { get; set; }
+        public bool Selected { get; set; }
     }
 }
