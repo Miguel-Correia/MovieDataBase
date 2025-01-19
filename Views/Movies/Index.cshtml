@@ -13,13 +13,17 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["MovieSortParam"]">
+                    @Html.DisplayNameFor(model => model.Title)
+                </a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Director)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateReleased)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParam"]">
+                    @Html.DisplayNameFor(model => model.DateReleased)
+                </a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CritiqueScore)

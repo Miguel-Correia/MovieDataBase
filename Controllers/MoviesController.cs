@@ -20,12 +20,33 @@ namespace MovieDataBase.Controllers
         }
 
         // GET: Movies
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
-            return View(await _context.Movies.Include(i => i.Images)
+            ViewData["MovieSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["DateSortParam"] = sortOrder == "date" ? "date_desc" : "date";
+
+            var movies = await _context.Movies.Include(i => i.Images)
                                                 .Include(g => g.MovieGenres)
                                                 .ThenInclude(mg => mg.Genre)
-                                                .ToListAsync());
+                                                .ToListAsync();
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    movies = movies.OrderByDescending(m => m.Title).ToList();
+                    break;
+                case "date":
+                    movies = movies.OrderBy(m => m.DateReleased).ToList();
+                    break;
+                case "date_desc":
+                    movies = movies.OrderByDescending(m => m.DateReleased).ToList();
+                    break;
+                default:
+                    movies = movies.OrderBy(m => m.Title).ToList();
+                    break;
+            }
+
+            return View(movies);
         }
 
         // GET: Movies/Details/5
