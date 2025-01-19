@@ -20,8 +20,9 @@ namespace MovieDataBase.Controllers
         }
 
         // GET: Movies
-        public async Task<IActionResult> Index(string sortOrder)
+        public async Task<IActionResult> Index(string sortOrder, int[] selectedGenres)
         {
+            PopulateGenresCheckboxes(selectedGenres);
             ViewData["MovieSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["DateSortParam"] = sortOrder == "date" ? "date_desc" : "date";
 
@@ -29,6 +30,11 @@ namespace MovieDataBase.Controllers
                                                 .Include(g => g.MovieGenres)
                                                 .ThenInclude(mg => mg.Genre)
                                                 .ToListAsync();
+
+            if (selectedGenres.Length > 0)
+            {
+                movies = movies.Where(m => m.MovieGenres.Any(mg => selectedGenres.Contains(mg.GenreId))).ToList();
+            }
 
             switch (sortOrder)
             {
@@ -123,32 +129,40 @@ namespace MovieDataBase.Controllers
         // POST: Movies/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, int[] selectedGenres)
+        public async Task<IActionResult> Edit(int? id, int[] selectedGenres)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var movie = await _context.Movies
+            var movieToUpdate = await _context.Movies
                 .Include(mg => mg.MovieGenres)
                 .ThenInclude(g => g.Genre)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (ModelState.IsValid && movie != null)
+
+            if (await TryUpdateModelAsync<Movies>(movieToUpdate, "", 
+                m => m.Title,
+                m => m.Director,
+                m => m.DateReleased,
+                m => m.Description,
+                m => m.Runtime,
+                m => m.ContentRating,
+                m => m.CritiqueScore))
             {
                 try
                 {
-                    UpdateMovieGenres(selectedGenres, movie);
+                    UpdateMovieGenres(selectedGenres, movieToUpdate);
 
-                    _context.Update(movie);
+                    _context.Update(movieToUpdate);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MovieExists(movie.Id))
+                    if (!MovieExists(movieToUpdate.Id))
                     {
                         return NotFound();
                     }
@@ -159,7 +173,11 @@ namespace MovieDataBase.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(movie);
+            //if (ModelState.IsValid && movie != null)
+            //{
+                
+            //}
+            return View(movieToUpdate);
         }
 
         // GET: Movies/Delete/5
@@ -225,6 +243,25 @@ namespace MovieDataBase.Controllers
                     GenreId = genre.Id,
                     GenreName = genre.Name != null ? genre.Name : "",
                     Selected = selectedMovieGenres.Contains(genre.Id)
+                });
+            }
+            ViewBag.Genres = viewModel;
+        }
+
+        private void PopulateGenresCheckboxes(int[] selectedGenres)
+        {
+            var allGenres = _context.Genre;
+            var selectedMovieGenres = new HashSet<int>();
+
+            var viewModel = new List<MovieGenreData>();
+
+            foreach (var genre in allGenres)
+            {
+                viewModel.Add(new MovieGenreData
+                {
+                    GenreId = genre.Id,
+                    GenreName = genre.Name != null ? genre.Name : "",
+                    Selected = selectedGenres.Contains(genre.Id)
                 });
             }
             ViewBag.Genres = viewModel;

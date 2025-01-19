@@ -9,6 +9,40 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+
+            <div class="col-md-offset-2 col-md-10">
+                <table>
+                <tr>
+                     @{
+                         int cnt = 0;
+                         List<MovieDataBase.Controllers.MovieGenreData> genres = ViewBag.Genres;
+
+                         foreach (var genre in genres)
+                         {
+                             if (cnt++ % 4 == 0)
+                             {
+                                 @:</tr><tr>
+                             }
+                             @:<td>
+                                 <input type="checkbox"
+                                        name="selectedGenres"
+                                        value="@genre.GenreId"
+                                        @(Html.Raw(genre.Selected ? "checked=\"checked\"" : "")) />
+                                        @genre.GenreName
+                             @:</td>
+                         }
+                         @:</tr>
+                     }
+                </table>
+                <input type="submit" value="Search" class="btn btn-primary" /> 
+                <a asp-action="Index">Back to Full List</a>
+            </div>
+        </p>
+    </div>
+</form>
 <table class="table">
     <thead>
         <tr>
