@@ -20,16 +20,22 @@ namespace MovieDataBase.Controllers
         }
 
         // GET: Movies
-        public async Task<IActionResult> Index(string sortOrder, int[] selectedGenres)
+        public async Task<IActionResult> Index(string sortOrder, int[] selectedGenres, string searchString)
         {
             PopulateGenresCheckboxes(selectedGenres);
             ViewData["MovieSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["DateSortParam"] = sortOrder == "date" ? "date_desc" : "date";
+            ViewData["CurrentSearch"] = searchString;
 
             var movies = await _context.Movies.Include(i => i.Images)
                                                 .Include(g => g.MovieGenres)
                                                 .ThenInclude(mg => mg.Genre)
                                                 .ToListAsync();
+
+            if (!String.IsNullOrWhiteSpace(searchString))
+            {
+                movies = movies.Where(i => i.Title.Contains(searchString)).ToList();
+            }
 
             if (selectedGenres.Length > 0)
             {
