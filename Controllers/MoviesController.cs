@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using MovieDataBase.Data;
 using MovieDataBase.Models;
 
@@ -99,6 +102,45 @@ namespace MovieDataBase.Controllers
             if (ModelState.IsValid)
             {
                 UpdateMovieGenres(selectedGenres, movie);
+
+                // create a image list to store the upload files.  
+                List<MovieImages> images = new List<MovieImages>();
+                if (movie.Files != null && movie.Files.Count > 0)
+                {
+                    foreach (var formFile in movie.Files)
+                    {
+                        if (formFile.Length > 0)
+                        {
+                            using (var memoryStream = new MemoryStream())
+                            {
+                                await formFile.CopyToAsync(memoryStream);
+                                // Upload the file if less than 2 MB  
+                                if (memoryStream.Length < 2097152)
+                                {
+                                    //based on the upload file to create Image instance.  
+                                    var newImage = new MovieImages()
+                                    {
+                                        Bytes = memoryStream.ToArray(),
+                                        Description = formFile.FileName,
+                                        FileExtension = Path.GetExtension(formFile.FileName),
+                                        Size = formFile.Length,
+                                        Movie = movie,
+                                        MovieId = movie.Id
+
+                                    };
+                                    //add the image instance to the list.  
+                                    images.Add(newImage);
+                                }
+                                else
+                                {
+                                    ModelState.AddModelError("File", "The file is too large.");
+                                }
+                            }
+                        }
+                    }
+                }
+
+                movie.Images = images;
 
                 _context.Add(movie);
                 await _context.SaveChangesAsync();
