@@ -199,11 +199,52 @@ namespace MovieDataBase.Controllers
                 m => m.Description,
                 m => m.Runtime,
                 m => m.ContentRating,
-                m => m.CritiqueScore))
+                m => m.CritiqueScore,
+                m => m.Files))
             {
                 try
                 {
                     UpdateMovieGenres(selectedGenres, movieToUpdate);
+
+
+                    // create a image list to store the upload files.  
+                    List<MovieImages> images = new List<MovieImages>();
+                    if (movieToUpdate.Files != null && movieToUpdate.Files.Count > 0)
+                    {
+                        foreach (var formFile in movieToUpdate.Files)
+                        {
+                            if (formFile.Length > 0)
+                            {
+                                using (var memoryStream = new MemoryStream())
+                                {
+                                    await formFile.CopyToAsync(memoryStream);
+                                    // Upload the file if less than 2 MB  
+                                    if (memoryStream.Length < 2097152)
+                                    {
+                                        //based on the upload file to create Image instance.  
+                                        var newImage = new MovieImages()
+                                        {
+                                            Bytes = memoryStream.ToArray(),
+                                            Description = formFile.FileName,
+                                            FileExtension = Path.GetExtension(formFile.FileName),
+                                            Size = formFile.Length,
+                                            Movie = movieToUpdate,
+                                            MovieId = movieToUpdate.Id
+
+                                        };
+                                        //add the image instance to the list.  
+                                        images.Add(newImage);
+                                    }
+                                    else
+                                    {
+                                        ModelState.AddModelError("File", "The file is too large.");
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    movieToUpdate.Images = images;
 
                     _context.Update(movieToUpdate);
                     await _context.SaveChangesAsync();
