@@ -75,12 +75,14 @@ namespace MovieDataBase.Controllers
             var movie = await _context.Movies
                 .Include(mg => mg.MovieGenres)
                 .ThenInclude(g => g.Genre)
+                .Include(mi => mi.Images)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (movie == null)
             {
                 return NotFound();
             }
-
+            
             return View(movie);
         }
 
