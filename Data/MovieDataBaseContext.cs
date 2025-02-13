@@ -43,5 +43,6 @@ namespace MovieDataBase.Data
         public DbSet<MovieDataBase.Models.Genre> Genre { get; set; } = default!;
         public DbSet<MovieGenres> MovieGenres { get; set; } = default!;
         public DbSet<MovieImages> MovieImages { get; set; }
+        public DbSet<MovieDataBase.Models.People> People { get; set; } = default!;
     }
 }
