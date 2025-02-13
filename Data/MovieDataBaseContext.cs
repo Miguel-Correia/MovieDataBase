@@ -27,6 +27,15 @@ namespace MovieDataBase.Data
 
             modelBuilder.Entity<MovieImages>().HasOne(mi => mi.Movie).WithMany(m => m.Images).HasForeignKey(mi => mi.MovieId);
 
+            modelBuilder.Entity<PeopleRole>().HasKey(pr => new
+            {
+                pr.PeopleId,
+                pr.RoleId
+            });
+
+            modelBuilder.Entity<PeopleRole>().HasOne(pr => pr.People).WithMany(p => p.Roles).HasForeignKey(mg => mg.PeopleId);
+            modelBuilder.Entity<PeopleRole>().HasOne(pr => pr.Role).WithMany(r => r.People).HasForeignKey(mg => mg.RoleId);
+
             base.OnModelCreating(modelBuilder);
         }
 
