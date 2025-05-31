@@ -12,6 +12,6 @@ namespace MovieDataBase.Models
         public DateTime? DateOfDeath { get; set; }
         public string? Biography { get; set; }
         public float Height { get; set; }
-        public List<PeopleRole>? Roles { get; set; }
+        public List<PeopleRolesInMovies>? MovieRoles { get; set; }
     }
 }

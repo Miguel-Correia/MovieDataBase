@@ -20,6 +20,8 @@ namespace MovieDataBase.Models
         [Display(Name = "Genres")]
         public List<MovieGenres>? MovieGenres { get; set; }
         public List<MovieImages>? Images { get; set; }
+        public List<PeopleRolesInMovies>? PeopleRoles { get; set; }
+
 
         [NotMapped]
         public IFormFileCollection? Files { get; set; }

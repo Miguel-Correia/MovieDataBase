@@ -27,14 +27,17 @@ namespace MovieDataBase.Data
 
             modelBuilder.Entity<MovieImages>().HasOne(mi => mi.Movie).WithMany(m => m.Images).HasForeignKey(mi => mi.MovieId);
 
-            modelBuilder.Entity<PeopleRole>().HasKey(pr => new
+            modelBuilder.Entity<PeopleRolesInMovies>().HasKey(pr => new
             {
+                pr.MovieId,
                 pr.PeopleId,
                 pr.RoleId
             });
 
-            modelBuilder.Entity<PeopleRole>().HasOne(pr => pr.People).WithMany(p => p.Roles).HasForeignKey(mg => mg.PeopleId);
-            modelBuilder.Entity<PeopleRole>().HasOne(pr => pr.Role).WithMany(r => r.People).HasForeignKey(mg => mg.RoleId);
+            modelBuilder.Entity<PeopleRolesInMovies>().HasOne(pr => pr.People).WithMany(p => p.MovieRoles).HasForeignKey(mg => mg.PeopleId);
+            modelBuilder.Entity<PeopleRolesInMovies>().HasOne(pr => pr.Role).WithMany(r => r.PeopleInMovies).HasForeignKey(mg => mg.RoleId);
+            modelBuilder.Entity<PeopleRolesInMovies>().HasOne(pr => pr.Movie).WithMany(m => m.PeopleRoles).HasForeignKey(mg => mg.MovieId);
+
 
             base.OnModelCreating(modelBuilder);
         }
@@ -44,5 +47,9 @@ namespace MovieDataBase.Data
         public DbSet<MovieGenres> MovieGenres { get; set; } = default!;
         public DbSet<MovieImages> MovieImages { get; set; }
         public DbSet<MovieDataBase.Models.People> People { get; set; } = default!;
+        public DbSet<MovieDataBase.Models.Role> Role { get; set; } = default!;
+        public DbSet<MovieDataBase.Models.PeopleRolesInMovies> PeopleRolesInMovies { get; set; } = default!;
+
+
     }
 }
