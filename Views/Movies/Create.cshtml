@@ -1,97 +1,108 @@
 ﻿@model MovieDataBase.Models.Movies
 
-@{
-    ViewData["Title"] = "Create";
-}
+<h1>Add New Movie</h1>
 
-<h1>Create</h1>
+<form asp-action="Create" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-<h4>Movie</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Director" class="control-label"></label>
-                <input asp-for="Director" class="form-control" />
-                <span asp-validation-for="Director" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateReleased" class="control-label"></label>
-                <input asp-for="DateReleased" type="date" class="form-control" />
-                <span asp-validation-for="DateReleased" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" type="text" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ContentRating" class="control-label"></label>
-                <input asp-for="ContentRating" class="form-control" />
-                <span asp-validation-for="ContentRating" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CritiqueScore" class="control-label"></label>
-                <input asp-for="CritiqueScore" class="form-control" />
-                <span asp-validation-for="CritiqueScore" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Runtime" class="control-label"></label>
-                <input asp-for="Runtime" class="form-control" />
-                <span asp-validation-for="Runtime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MovieGenres" class="control-label"></label>
-                <div class="col-md-offset-2 col-md-10">
-                    <table>
-                    <tr>
-                         @{
-                             int cnt = 0;
-                             List<MovieDataBase.Controllers.MovieGenreData> genres = ViewBag.Genres;
-
-                             foreach (var genre in genres)
-                             {
-                                 if (cnt++ % 3 == 0)
-                                 {
-                                     @:</tr><tr>
-                                 }
-                                 @:<td>
-                                     <input type="checkbox"
-                                            name="selectedGenres"
-                                            value="@genre.GenreId"
-                                            @(Html.Raw(genre.Selected ? "checked=\"checked\"" : "")) />
-                                            @genre.GenreName
-                                 @:</td>
-                             }
-                             @:</tr>
-                         }
-                    </table>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Files" class="control-label"></label>
-                <input asp-for="Files" class="form-control" multiple />
-                <span asp-validation-for="Files" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div class="mb-3">
+        <label asp-for="Director" class="form-label"></label>
+        <input asp-for="Director" class="form-control" />
+        <span asp-validation-for="Director" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="DateReleased" class="form-label"></label>
+        <input asp-for="DateReleased" type="date" class="form-control" />
+        <span asp-validation-for="DateReleased" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Runtime" class="form-label"></label>
+        <input asp-for="Runtime" type="number" class="form-control" />
+        <span asp-validation-for="Runtime" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ContentRating" class="form-label"></label>
+        <input asp-for="ContentRating" class="form-control" />
+        <span asp-validation-for="ContentRating" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="CritiqueScore" class="form-label"></label>
+        <input asp-for="CritiqueScore" type="number" class="form-control" />
+        <span asp-validation-for="CritiqueScore" class="text-danger"></span>
+    </div>
+
+    <!-- Genre Checkboxes -->
+    <div class="mb-3">
+        <label class="form-label">Genres</label>
+        <div>
+            <table>
+                <tr>
+                    @{
+                        int cnt = 0;
+                        List<MovieDataBase.Controllers.MovieGenreData> genres = ViewBag.Genres;
+                        foreach (var genre in genres)
+                        {
+                            if (cnt++ % 3 == 0)
+                            {
+                                @:</tr><tr>
+                            }
+                            @:<td>
+                                <input type="checkbox"
+                                       name="selectedGenres"
+                                       value="@genre.GenreId"
+                                       @(Html.Raw(genre.Selected ? "checked=\"checked\"" : "")) />
+                                @genre.GenreName
+                            @:</td>
+                        }
+                        @:</tr>
+                    }
+            </table>
+        </div>
+    </div>
+
+    <!-- File Upload -->
+    <div class="mb-3">
+        <label asp-for="Files" class="form-label">Upload Posters</label>
+        <input asp-for="Files" type="file" class="form-control" accept="image/*" multiple onchange="previewImages(event)" />
+        <span asp-validation-for="Files" class="text-danger"></span>
+    </div>
+
+    <div id="preview-container" class="mb-3 d-flex flex-wrap gap-2"></div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function previewImages(event) {
+            const container = document.getElementById('preview-container');
+            container.innerHTML = '';
+            Array.from(event.target.files).forEach(file => {
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                img.style.maxWidth = '150px';
+                img.style.maxHeight = '150px';
+                img.style.objectFit = 'cover';
+                img.classList.add('border', 'p-1');
+                container.appendChild(img);
+            });
+        }
+    </script>
 }

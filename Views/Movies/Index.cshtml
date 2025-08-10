@@ -1,114 +1,64 @@
 ﻿@model IEnumerable<MovieDataBase.Models.Movies>
 
-@{
-    ViewData["Title"] = "Index";
-}
+<h1 class="mb-4 text-light">Movie Catalog</h1>
+<a asp-action="Create" class="btn btn-primary mt-4">+ Add New Movie</a>
+<hr class="border-secondary" />
 
-<h1>Index</h1>
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    @foreach (var movie in Model)
+    {
+        <div class="col">
+            <div class="card h-100 shadow-sm bg-dark border-secondary">
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<form asp-action="Index" method="get">
-    <div class="form-actions no-color">
-        <p>
+                @if (movie.Images != null && movie.Images.Any())
+                {
+                    <div id="carousel-@movie.Id" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            @for (int i = 0; i < movie.Images.Count; i++)
+                            {
+                                var img = movie.Images[i];
+                                <div class="carousel-item @(i == 0 ? "active" : "")">
+                                    <img src="@Url.Action("GetImage", "Movies", new { id = img.Id })"
+                                         class="d-block w-100"
+                                         style="object-fit: cover; height: 300px;" />
+                                </div>
+                            }
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carousel-@movie.Id" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carousel-@movie.Id" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </button>
+                    </div>
+                }
+                else
+                {
+                    <img src="/images/no-poster.png"
+                         class="card-img-top"
+                         alt="@movie.Title"
+                         style="object-fit: cover; height: 300px;" />
+                }
 
-            <div class="col-md-offset-2 col-md-10">
-                <table>
-                <tr>
-                     @{
-                         int cnt = 0;
-                         List<MovieDataBase.Controllers.MovieGenreData> genres = ViewBag.Genres;
-
-                         foreach (var genre in genres)
-                         {
-                             if (cnt++ % 4 == 0)
-                             {
-                                 @:</tr><tr>
-                             }
-                             @:<td>
-                                 <input type="checkbox"
-                                        name="selectedGenres"
-                                        value="@genre.GenreId"
-                                        @(Html.Raw(genre.Selected ? "checked=\"checked\"" : "")) />
-                                        @genre.GenreName
-                             @:</td>
-                         }
-                         @:</tr>
-                     }
-                </table>
-                <label>Find by Title: <input type="text" name="SearchString" value="@ViewData["CurrentSearch"]" /></label>
-                <input type="submit" value="Search" class="btn btn-primary" /> 
-                <a asp-action="Index">Back to Full List</a>
-            </div>
-        </p>
-    </div>
-</form>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["MovieSortParam"]">
-                    @Html.DisplayNameFor(model => model.Title)
-                </a>
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Director)
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParam"]">
-                    @Html.DisplayNameFor(model => model.DateReleased)
-                </a>
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CritiqueScore)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ContentRating)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Runtime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MovieGenres)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Director)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateReleased)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CritiqueScore)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ContentRating)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Runtime)
-            </td>
-            <td>
-                    @foreach(var genre in item.MovieGenres)
+                <div class="card-body">
+                    <h5 class="card-title text-light">@movie.Title</h5>
+                    <p class="card-text text-secondary">Directed by: @movie.Director</p>
+                    @if (movie.DateReleased.HasValue)
                     {
-                        var name = genre.Genre.Name + " | ";                       
-                        @name
+                        <p class="card-text">
+                            <small class="text-muted">
+                                Released: @movie.DateReleased.Value.ToString("yyyy-MM-dd")
+                            </small>
+                        </p>
                     }
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                </div>
+
+                <div class="card-footer d-flex justify-content-between bg-transparent border-secondary">
+                    <a asp-action="Edit" asp-route-id="@movie.Id" class="btn btn-sm btn-warning">Edit</a>
+                    <a asp-action="Details" asp-route-id="@movie.Id" class="btn btn-sm btn-info text-white">Details</a>
+                    <a asp-action="Delete" asp-route-id="@movie.Id" class="btn btn-sm btn-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -1,87 +1,121 @@
 ﻿@model MovieDataBase.Models.Movies
 
-@{
-    ViewData["Title"] = "Details";
-    var imgSrc = "";
-    if (Model.Images != null && Model.Images.Any())
-    {
-        var base64 = Convert.ToBase64String(Model.Images.FirstOrDefault().Bytes);
-        imgSrc = String.Format("data:image;base64,{0}", base64);
-    }
-    
+<h1 class="mb-4 text-light">@Model.Title</h1>
+
+@if (Model.Images != null && Model.Images.Any())
+{
+    <div id="movieCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            @for (int i = 0; i < Model.Images.Count; i++)
+            {
+                var img = Model.Images[i];
+                <div class="carousel-item @(i == 0 ? "active" : "")">
+                    <img src="@Url.Action("GetImage", "Movies", new { id = img.Id })"
+                         class="d-block w-100"
+                         alt="@Model.Title"
+                         style="max-height:500px; object-fit:contain; background-color:black;" />
+                </div>
+            }
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#movieCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#movieCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+    </div>
+}
+else
+{
+    <p class="text-muted"><em>No images available.</em></p>
 }
 
-<h1>Details</h1>
+<div class="mb-4 bg-dark p-4 rounded border border-secondary">
+    <h4 class="text-light">Movie Details</h4>
+    <dl class="row text-light">
+        <dt class="col-sm-3">Director</dt>
+        <dd class="col-sm-9">@Model.Director</dd>
+
+        <dt class="col-sm-3">Release Date</dt>
+        <dd class="col-sm-9">@Model.DateReleased?.ToString("yyyy-MM-dd")</dd>
+
+        <dt class="col-sm-3">Description</dt>
+        <dd class="col-sm-9">@Model.Description</dd>
+
+        <dt class="col-sm-3">Runtime</dt>
+        <dd class="col-sm-9">
+            @if (Model.Runtime.HasValue)
+            {
+                @($"{Model.Runtime.Value} min")
+            }
+            else
+            {
+                <em>Unknown</em>
+            }
+        </dd>
+
+        <dt class="col-sm-3">Content Rating</dt>
+        <dd class="col-sm-9">
+            @if (!string.IsNullOrWhiteSpace(Model.ContentRating))
+            {
+                @Model.ContentRating
+            }
+            else
+            {
+                <em>Not set</em>
+            }
+        </dd>
+
+        <dt class="col-sm-3">Critique Score</dt>
+        <dd class="col-sm-9">
+            @if (Model.CritiqueScore.HasValue)
+            {
+                <span class="badge bg-success">@Model.CritiqueScore.Value/100</span>
+            }
+            else
+            {
+                <em>Not rated</em>
+            }
+        </dd>
+
+        <dt class="col-sm-3">Genres</dt>
+        <dd class="col-sm-9">
+            @if (Model.MovieGenres != null && Model.MovieGenres.Any(mg => mg.Genre != null))
+            {
+                @string.Join(", ", Model.MovieGenres.Where(mg => mg.Genre != null).Select(mg => mg.Genre.Name))
+            }
+            else
+            {
+                <em>No genres assigned</em>
+            }
+        </dd>
+
+        <dt class="col-sm-3">People / Roles</dt>
+        <dd class="col-sm-9">
+            @if (Model.PeopleRoles != null && Model.PeopleRoles.Any())
+            {
+                <ul class="mb-0">
+                    @foreach (var pr in Model.PeopleRoles)
+                    {
+                        <li>
+                            @pr.People?.Name
+                            @if (pr.Role != null)
+                            {
+                                @($" ({pr.Role.Name})")
+                            }
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <em>No people assigned</em>
+            }
+        </dd>
+    </dl>
+</div>
 
 <div>
-    <h4>Movie</h4>
-    <hr />
-    <dl class="row">
-        <dd class="col-sm-8">
-            <dl class="row">
-                <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.Title)
-                </dt>
-                <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.Title)
-                </dd>
-                <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.Director)
-                </dt>
-                <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.Director)
-                </dd>
-                <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.DateReleased)
-                </dt>
-                <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.DateReleased)
-                </dd>
-                <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.Description)
-                </dt>
-                <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.Description)
-                </dd>
-                <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.Runtime)
-                </dt>
-                <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.Runtime)
-                </dd>
-                <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.CritiqueScore)
-                </dt>
-                <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.CritiqueScore)
-                </dd>
-                <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.ContentRating)
-                </dt>
-                <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.ContentRating)
-                </dd>
-                <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.MovieGenres)
-                </dt>
-                <dd class="col-sm-10">
-                        @foreach (var genre in Model.MovieGenres)
-                        {
-                            var name = genre.Genre.Name + " | ";
-                            @name
-                        }
-                </dd>
-            </dl>
-        </dd>
-        <dd class="col-sm-4">
-            @if (!String.IsNullOrWhiteSpace(imgSrc))
-            {
-                <img src="@imgSrc" width="280" height="360" />
-            }           
-        </dd>
-    </dl>       
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </div>

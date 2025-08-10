@@ -412,6 +412,22 @@ namespace MovieDataBase.Controllers
 
         }
 
+        public IActionResult GetImage(int id)
+        {
+            var image = _context.MovieImages.FirstOrDefault(i => i.Id == id);
+            if (image == null || image.Bytes == null)
+            {
+                return NotFound();
+            }
+
+            var contentType = !string.IsNullOrEmpty(image.FileExtension)
+                ? $"image/{image.FileExtension.TrimStart('.')}"
+                : "image/jpeg";
+
+            return File(image.Bytes, contentType);
+        }
+
+
     }
 
     public class MovieGenreData

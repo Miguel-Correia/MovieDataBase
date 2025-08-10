@@ -1,22 +1,86 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
+/* General background & text colors */
 body {
-  margin-bottom: 60px;
+    background-color: #0d0d0d;
+    color: #e5e5e5;
 }
+
+/* Navbar - darker and sleek */
+.navbar {
+    background: linear-gradient(90deg, #000000 0%, #141414 100%) !important;
+}
+
+/* Footer */
+footer {
+    background-color: #141414 !important;
+    font-size: 0.9rem;
+}
+
+/* Movie cards */
+.card {
+    background-color: #1a1a1a;
+    border: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 20px rgba(255, 0, 0, 0.2);
+    }
+
+.card-title {
+    color: #ffffff;
+}
+
+.card-text {
+    color: #b3b3b3;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: #e50914;
+    border-color: #e50914;
+}
+
+    .btn-primary:hover {
+        background-color: #f6121d;
+        border-color: #f6121d;
+    }
+
+.btn-warning {
+    background-color: #ffb300;
+    border-color: #ffb300;
+}
+
+.btn-info {
+    background-color: #0071eb;
+    border-color: #0071eb;
+}
+
+/* Forms */
+.form-control, .form-select {
+    background-color: #1c1c1c;
+    border: 1px solid #333;
+    color: #ffffff;
+}
+
+    .form-control:focus, .form-select:focus {
+        background-color: #1c1c1c;
+        border-color: #e50914;
+        box-shadow: 0 0 0 0.2rem rgba(229, 9, 20, 0.25);
+    }
+
+/* Genre checkboxes */
+.form-check-input:checked {
+    background-color: #e50914;
+    border-color: #e50914;
+}
+
+/* Links */
+a {
+    color: #e50914;
+    text-decoration: none;
+}
+
+    a:hover {
+        color: #f6121d;
+        text-d
