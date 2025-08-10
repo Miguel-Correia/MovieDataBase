@@ -3,141 +3,112 @@
 @{
     ViewData["Title"] = "Index";
 }
-    <div class="row" style="height:">
-        <div class="col-md-2">
-            <form asp-action="Index" method="get">
-                <div class="form-actions no-color">
-                    @* <div class="input-field row">
-                        <div class="col-md-2">
-                            <button type="submit" class="btn btn-primary" ><i class="material-icons">search</i></button>                         
-                        </div>
-                        <div class="col-md-8">
-                            <input type="text" name="SearchString" value="@ViewData["CurrentSearch"]" />
-                        </div>
-                        <div class="col-md-2">
-                            <a asp-action="Index"><i class="material-icons">close</i></a>
-                        </div>
-                    </div> *@
-                    <p></p>
-                    <div class="input-group">
-                    <div class="form-outline">
-                        <input type="text" name="SearchString" value="@ViewData["CurrentSearch"]" />
-                    </div>
-                    <button type="submit" class="btn btn-primary" >
-                        <i class="material-icons">search</i>
-                    </button>
-                    </div>
-                    <h6>Genre</h6>
-                        @{
-                            int cnt = 0;
-                            List<MovieDataBase.Controllers.MovieGenreData> genres = ViewBag.Genres;
-    
-                            foreach (var genre in genres)
-                            {
-                                @:<p>
-                                    <label>
-                                        <input type="checkbox"
-                                                class="filled-in"
-                                               name="selectedGenres"
-                                               value="@genre.GenreId"
-                                               @(Html.Raw(genre.Selected ? "checked=\"checked\"" : "")) />
-                                                <span>@genre.GenreName</span>
-                                    </label>
-                                @:</p>
-                            }
-                           
-                        }
-                </div>
-            </form>
-        </div>
-        <div class="col-md-10">
-            <p></p>
-                
 
+<h1>Index</h1>
 
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
 
+            <div class="col-md-offset-2 col-md-10">
+                <table>
+                <tr>
+                     @{
+                         int cnt = 0;
+                         List<MovieDataBase.Controllers.MovieGenreData> genres = ViewBag.Genres;
 
-
-                @* <div class="col-md-2">
-                                          
-                </div>
-                <div class="col-md-8">
-                     <button type="submit" class="btn btn-primary" ><i class="material-icons">search</i></button>  
-                    <input type="text" name="SearchString" value="@ViewData["CurrentSearch"]" />
-                    <a asp-action="Index"><i class="material-icons">close</i></a>
- 
-                </div>*@
-            
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            <a asp-action="Index" asp-route-sortOrder="@ViewData["MovieSortParam"]">
-                                @Html.DisplayNameFor(model => model.Title)
-                            </a>
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Director)
-                        </th>
-                        <th>
-                            <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParam"]">
-                                @Html.DisplayNameFor(model => model.DateReleased)
-                            </a>
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.CritiqueScore)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.ContentRating)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Runtime)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.MovieGenres)
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-            @foreach (var item in Model) {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Title)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Director)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DateReleased)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.CritiqueScore)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ContentRating)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Runtime)
-                        </td>
-                        <td>
-                                @foreach(var genre in item.MovieGenres)
-                                {
-                                    var name = genre.Genre.Name + " | ";                       
-                                    @name
-                                }
-                        </td>
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                        </td>
-                    </tr>
-            }
-                </tbody>
-            </table>
-        </div>
+                         foreach (var genre in genres)
+                         {
+                             if (cnt++ % 4 == 0)
+                             {
+                                 @:</tr><tr>
+                             }
+                             @:<td>
+                                 <input type="checkbox"
+                                        name="selectedGenres"
+                                        value="@genre.GenreId"
+                                        @(Html.Raw(genre.Selected ? "checked=\"checked\"" : "")) />
+                                        @genre.GenreName
+                             @:</td>
+                         }
+                         @:</tr>
+                     }
+                </table>
+                <label>Find by Title: <input type="text" name="SearchString" value="@ViewData["CurrentSearch"]" /></label>
+                <input type="submit" value="Search" class="btn btn-primary" /> 
+                <a asp-action="Index">Back to Full List</a>
+            </div>
+        </p>
     </div>
-
-
-
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["MovieSortParam"]">
+                    @Html.DisplayNameFor(model => model.Title)
+                </a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Director)
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParam"]">
+                    @Html.DisplayNameFor(model => model.DateReleased)
+                </a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CritiqueScore)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ContentRating)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Runtime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MovieGenres)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Director)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateReleased)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CritiqueScore)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ContentRating)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Runtime)
+            </td>
+            <td>
+                    @foreach(var genre in item.MovieGenres)
+                    {
+                        var name = genre.Genre.Name + " | ";                       
+                        @name
+                    }
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
