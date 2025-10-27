@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieDataBase.Data;
 
@@ -11,9 +12,11 @@ using MovieDataBase.Data;
 namespace MovieDataBase.Migrations
 {
     [DbContext(typeof(MovieDataBaseContext))]
-    partial class MovieDataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20251027202257_SeedInitialData")]
+    partial class SeedInitialData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,32 +42,6 @@ namespace MovieDataBase.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Genre");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "Fast-paced, high energy films.",
-                            Name = "Action"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "Emotion-driven storytelling.",
-                            Name = "Drama"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = "Humorous and light-hearted films.",
-                            Name = "Comedy"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Description = "Futuristic and science-based stories.",
-                            Name = "Sci-Fi"
-                        });
                 });
 
             modelBuilder.Entity("MovieDataBase.Models.MovieGenres", b =>
@@ -80,33 +57,6 @@ namespace MovieDataBase.Migrations
                     b.HasIndex("GenreId");
 
                     b.ToTable("MovieGenres");
-
-                    b.HasData(
-                        new
-                        {
-                            MovieId = 1,
-                            GenreId = 1
-                        },
-                        new
-                        {
-                            MovieId = 2,
-                            GenreId = 2
-                        },
-                        new
-                        {
-                            MovieId = 3,
-                            GenreId = 3
-                        },
-                        new
-                        {
-                            MovieId = 4,
-                            GenreId = 4
-                        },
-                        new
-                        {
-                            MovieId = 5,
-                            GenreId = 2
-                        });
                 });
 
             modelBuilder.Entity("MovieDataBase.Models.MovieImages", b =>
@@ -162,63 +112,6 @@ namespace MovieDataBase.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Movies");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ContentRating = "PG-13",
-                            CritiqueScore = 78,
-                            DateReleased = new DateOnly(2020, 5, 1),
-                            Description = "High-octane action thriller.",
-                            Director = "A. Silva",
-                            Runtime = 118,
-                            Title = "Edge of Dawn"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ContentRating = "R",
-                            CritiqueScore = 84,
-                            DateReleased = new DateOnly(2019, 10, 12),
-                            Description = "Emotional drama about family and loss.",
-                            Director = "M. Costa",
-                            Runtime = 105,
-                            Title = "Silent River"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ContentRating = "PG",
-                            CritiqueScore = 70,
-                            DateReleased = new DateOnly(2021, 3, 20),
-                            Description = "Light-hearted comedy for all ages.",
-                            Director = "R. Pereira",
-                            Runtime = 95,
-                            Title = "Laugh Riot"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            ContentRating = "PG-13",
-                            CritiqueScore = 88,
-                            DateReleased = new DateOnly(2022, 8, 5),
-                            Description = "Visually stunning sci-fi adventure.",
-                            Director = "L. Fernandes",
-                            Runtime = 132,
-                            Title = "Neon Galaxy"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            ContentRating = "PG-13",
-                            CritiqueScore = 76,
-                            DateReleased = new DateOnly(2018, 11, 2),
-                            Description = "Drama with surprising twists.",
-                            Director = "S. Almeida",
-                            Runtime = 110,
-                            Title = "Crossroads"
-                        });
                 });
 
             modelBuilder.Entity("MovieDataBase.Models.People", b =>
