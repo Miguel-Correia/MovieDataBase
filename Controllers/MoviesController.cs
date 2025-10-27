@@ -106,7 +106,7 @@ namespace MovieDataBase.Controllers
                 UpdateMovieGenres(selectedGenres, movie);
 
                 // create a image list to store the upload files.  
-                List<MovieImages> images = new List<MovieImages>();
+                /*List<MovieImages> images = new List<MovieImages>();
                 if (movie.Files != null && movie.Files.Count > 0)
                 {
                     foreach (var formFile in movie.Files)
@@ -143,7 +143,7 @@ namespace MovieDataBase.Controllers
                 }
 
                 movie.Images = images;
-
+                */
                 _context.Add(movie);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -210,6 +210,7 @@ namespace MovieDataBase.Controllers
 
 
                     // create a image list to store the upload files.  
+                    /*
                     List<MovieImages> images = new List<MovieImages>();
                     if (movieToUpdate.Files != null && movieToUpdate.Files.Count > 0)
                     {
@@ -247,7 +248,7 @@ namespace MovieDataBase.Controllers
                     }
 
                     movieToUpdate.Images = images;
-
+                    */
                     _context.Update(movieToUpdate);
                     await _context.SaveChangesAsync();
                 }
@@ -412,6 +413,7 @@ namespace MovieDataBase.Controllers
 
         }
 
+        /*
         public IActionResult GetImage(int id)
         {
             var image = _context.MovieImages.FirstOrDefault(i => i.Id == id);
@@ -426,6 +428,7 @@ namespace MovieDataBase.Controllers
 
             return File(image.Bytes, contentType);
         }
+        */
 
 
     }
