@@ -64,6 +64,22 @@ namespace MovieDataBase.Controllers
                     break;
             }
 
+            // Adicionar URLs completas às imagens
+            if (movies.Count() > 0 )
+            {
+                foreach (var movie in movies)
+                {
+                    if (movie.Images != null && movie.Images.Count > 0)
+                    {
+                        foreach (var image in movie.Images)
+                        {
+                            if (image.imageUrl == null) continue;
+                            image.FullUrl = _storageService.GetFullUrl(image.imageUrl);
+                        }
+                    }
+                }
+            }
+
             return View(movies);
         }
 
@@ -85,6 +101,16 @@ namespace MovieDataBase.Controllers
             {
                 return NotFound();
             }
+
+            // Adicionar URLs completas às imagens
+            if (movie.Images != null)
+            {
+                foreach (var image in movie.Images)
+                {
+                    image.FullUrl = _storageService.GetFullUrl(image.imageUrl);
+                }
+            }
+
 
             return View(movie);
         }

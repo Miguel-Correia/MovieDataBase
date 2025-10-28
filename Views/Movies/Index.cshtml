@@ -18,7 +18,7 @@
                             {
                                 var img = movie.Images[i];
                                 <div class="carousel-item @(i == 0 ? "active" : "")">
-                                    <img src="@Url.Action("GetImage", "Movies", new { id = img.Id })"
+                                    <img src="@img.FullUrl"
                                          class="d-block w-100"
                                          style="object-fit: cover; height: 300px;" />
                                 </div>

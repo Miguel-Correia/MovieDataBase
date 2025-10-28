@@ -7,7 +7,7 @@ namespace MovieDataBase.Services
     {
         Task<string> UploadImageAsync(IFormFile file, string bucketName = "movie-images");
         Task<bool> DeleteImageAsync(string imageUrl, string bucketName = "movie-images");
-        string GetFullUrl(string relativePath); // NOVO
+        string GetFullUrl(string relativePath); 
     }   
 
     public class MinioStorageService : IStorageService
@@ -31,12 +31,14 @@ namespace MovieDataBase.Services
                 await _minioClient.MakeBucketAsync(
                     new MakeBucketArgs().WithBucket(bucketName));
                 
-                var policy = @$"{{
+                var policy = $@"{{
                     ""Version"": ""2012-10-17"",
                     ""Statement"": [
                         {{
                             ""Effect"": ""Allow"",
-                            ""Principal"": {{""AWS"": [""*""]}},
+                            ""Principal"": {{
+                                ""AWS"": [""*""]
+                            }},
                             ""Action"": [""s3:GetObject""],
                             ""Resource"": [""arn:aws:s3:::{bucketName}/*""]
                         }}
