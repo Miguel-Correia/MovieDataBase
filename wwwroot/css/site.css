@@ -83,4 +83,5 @@ a {
 
     a:hover {
         color: #f6121d;
-        text-d
+        text-decoration: underline;
+    }
