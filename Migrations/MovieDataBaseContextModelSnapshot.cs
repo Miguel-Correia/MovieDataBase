@@ -89,6 +89,11 @@ namespace MovieDataBase.Migrations
                         },
                         new
                         {
+                            MovieId = 1,
+                            GenreId = 2
+                        },
+                        new
+                        {
                             MovieId = 2,
                             GenreId = 2
                         },
@@ -104,7 +109,42 @@ namespace MovieDataBase.Migrations
                         },
                         new
                         {
+                            MovieId = 4,
+                            GenreId = 1
+                        },
+                        new
+                        {
                             MovieId = 5,
+                            GenreId = 2
+                        },
+                        new
+                        {
+                            MovieId = 5,
+                            GenreId = 3
+                        },
+                        new
+                        {
+                            MovieId = 6,
+                            GenreId = 1
+                        },
+                        new
+                        {
+                            MovieId = 6,
+                            GenreId = 4
+                        },
+                        new
+                        {
+                            MovieId = 7,
+                            GenreId = 4
+                        },
+                        new
+                        {
+                            MovieId = 7,
+                            GenreId = 2
+                        },
+                        new
+                        {
+                            MovieId = 8,
                             GenreId = 2
                         });
                 });
@@ -168,56 +208,89 @@ namespace MovieDataBase.Migrations
                         {
                             Id = 1,
                             ContentRating = "PG-13",
-                            CritiqueScore = 78,
-                            DateReleased = new DateOnly(2020, 5, 1),
-                            Description = "High-octane action thriller.",
-                            Director = "A. Silva",
-                            Runtime = 118,
-                            Title = "Edge of Dawn"
+                            CritiqueScore = 94,
+                            DateReleased = new DateOnly(2008, 7, 18),
+                            Description = "Batman faces the Joker, a criminal mastermind who wants to plunge Gotham City into anarchy.",
+                            Director = "Christopher Nolan",
+                            Runtime = 152,
+                            Title = "The Dark Knight"
                         },
                         new
                         {
                             Id = 2,
                             ContentRating = "R",
-                            CritiqueScore = 84,
-                            DateReleased = new DateOnly(2019, 10, 12),
-                            Description = "Emotional drama about family and loss.",
-                            Director = "M. Costa",
-                            Runtime = 105,
-                            Title = "Silent River"
+                            CritiqueScore = 91,
+                            DateReleased = new DateOnly(1994, 9, 23),
+                            Description = "Two imprisoned men bond over years, finding solace and eventual redemption through acts of common decency.",
+                            Director = "Frank Darabont",
+                            Runtime = 142,
+                            Title = "The Shawshank Redemption"
                         },
                         new
                         {
                             Id = 3,
-                            ContentRating = "PG",
-                            CritiqueScore = 70,
-                            DateReleased = new DateOnly(2021, 3, 20),
-                            Description = "Light-hearted comedy for all ages.",
-                            Director = "R. Pereira",
-                            Runtime = 95,
-                            Title = "Laugh Riot"
+                            ContentRating = "R",
+                            CritiqueScore = 88,
+                            DateReleased = new DateOnly(2007, 8, 17),
+                            Description = "Two co-dependent high school seniors are forced to deal with separation anxiety after their plan to stage a booze-soaked party goes awry.",
+                            Director = "Greg Mottola",
+                            Runtime = 113,
+                            Title = "Superbad"
                         },
                         new
                         {
                             Id = 4,
                             ContentRating = "PG-13",
-                            CritiqueScore = 88,
-                            DateReleased = new DateOnly(2022, 8, 5),
-                            Description = "Visually stunning sci-fi adventure.",
-                            Director = "L. Fernandes",
-                            Runtime = 132,
-                            Title = "Neon Galaxy"
+                            CritiqueScore = 87,
+                            DateReleased = new DateOnly(2010, 7, 16),
+                            Description = "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea.",
+                            Director = "Christopher Nolan",
+                            Runtime = 148,
+                            Title = "Inception"
                         },
                         new
                         {
                             Id = 5,
                             ContentRating = "PG-13",
-                            CritiqueScore = 76,
-                            DateReleased = new DateOnly(2018, 11, 2),
-                            Description = "Drama with surprising twists.",
-                            Director = "S. Almeida",
-                            Runtime = 110,
-                            Title = "Crossroads"
+                            CritiqueScore = 71,
+                            DateReleased = new DateOnly(1994, 7, 6),
+                            Description = "The presidencies of Kennedy and Johnson, the Vietnam War, and other historical events unfold from the perspective of an Alabama man.",
+                            Director = "Robert Zemeckis",
+                            Runtime = 142,
+                            Title = "Forrest Gump"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            ContentRating = "R",
+                            CritiqueScore = 97,
+                            DateReleased = new DateOnly(2015, 5, 15),
+                            Description = "In a post-apocalyptic wasteland, a woman rebels against a tyrannical ruler in search for her homeland with the aid of a group of female prisoners.",
+                            Director = "George Miller",
+                            Runtime = 120,
+                            Title = "Mad Max: Fury Road"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            ContentRating = "PG-13",
+                            CritiqueScore = 72,
+                            DateReleased = new DateOnly(2014, 11, 7),
+                            Description = "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
+                            Director = "Christopher Nolan",
+                            Runtime = 169,
+                            Title = "Interstellar"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            ContentRating = "R",
+                            CritiqueScore = 96,
+                            DateReleased = new DateOnly(2019, 5, 30),
+                            Description = "Greed and class discrimination threaten the newly formed symbiotic relationship between the wealthy Park family and the destitute Kim clan.",
+                            Director = "Bong Joon-ho",
+                            Runtime = 132,
+                            Title = "Parasite"
                         });
                 });
 
