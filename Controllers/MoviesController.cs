@@ -10,16 +10,19 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using MovieDataBase.Data;
 using MovieDataBase.Models;
+using MovieDataBase.Services;
 
 namespace MovieDataBase.Controllers
 {
     public class MoviesController : Controller
     {
         private readonly MovieDataBaseContext _context;
+        private readonly IStorageService _storageService;
 
-        public MoviesController(MovieDataBaseContext context)
+        public MoviesController(MovieDataBaseContext context, IStorageService storageService)
         {
             _context = context;
+            _storageService = storageService;
         }
 
         // GET: Movies
@@ -82,7 +85,7 @@ namespace MovieDataBase.Controllers
             {
                 return NotFound();
             }
-            
+
             return View(movie);
         }
 
@@ -100,50 +103,16 @@ namespace MovieDataBase.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Movies movie, int[] selectedGenres)
         {
-            
+
             if (ModelState.IsValid)
             {
                 UpdateMovieGenres(selectedGenres, movie);
 
-                // create a image list to store the upload files.  
-                /*List<MovieImages> images = new List<MovieImages>();
-                if (movie.Files != null && movie.Files.Count > 0)
-                {
-                    foreach (var formFile in movie.Files)
-                    {
-                        if (formFile.Length > 0)
-                        {
-                            using (var memoryStream = new MemoryStream())
-                            {
-                                await formFile.CopyToAsync(memoryStream);
-                                // Upload the file if less than 2 MB  
-                                if (memoryStream.Length < 2097152)
-                                {
-                                    //based on the upload file to create Image instance.  
-                                    var newImage = new MovieImages()
-                                    {
-                                        Bytes = memoryStream.ToArray(),
-                                        Description = formFile.FileName,
-                                        FileExtension = Path.GetExtension(formFile.FileName),
-                                        Size = formFile.Length,
-                                        Movie = movie,
-                                        MovieId = movie.Id
-
-                                    };
-                                    //add the image instance to the list.  
-                                    images.Add(newImage);
-                                }
-                                else
-                                {
-                                    ModelState.AddModelError("File", "The file is too large.");
-                                }
-                            }
-                        }
-                    }
-                }
-
-                movie.Images = images;
-                */
+                
+                // Criar a lista de imagens a partir dos ficheiros enviados
+                var newImages = await CreateImageListFromFiles(movie);
+                movie.Images = newImages;
+                  
                 _context.Add(movie);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -191,10 +160,17 @@ namespace MovieDataBase.Controllers
             var movieToUpdate = await _context.Movies
                 .Include(mg => mg.MovieGenres)
                 .ThenInclude(g => g.Genre)
+                .Include(m => m.Images) // Incluir imagens existentes
                 .FirstOrDefaultAsync(m => m.Id == id);
 
+            if (movieToUpdate == null)
+            {
+                return NotFound();
+            }
 
-            if (await TryUpdateModelAsync<Movies>(movieToUpdate, "", 
+            if (await TryUpdateModelAsync<Movies>(
+                movieToUpdate, 
+                "", 
                 m => m.Title,
                 m => m.Director,
                 m => m.DateReleased,
@@ -208,49 +184,29 @@ namespace MovieDataBase.Controllers
                 {
                     UpdateMovieGenres(selectedGenres, movieToUpdate);
 
-
-                    // create a image list to store the upload files.  
-                    /*
-                    List<MovieImages> images = new List<MovieImages>();
-                    if (movieToUpdate.Files != null && movieToUpdate.Files.Count > 0)
+                    // Criar a lista de novas imagens a partir dos ficheiros enviados
+                    var newImages = await CreateImageListFromFiles(movieToUpdate);
+                    if (newImages != null && newImages.Count > 0)
                     {
-                        foreach (var formFile in movieToUpdate.Files)
-                        {
-                            if (formFile.Length > 0)
-                            {
-                                using (var memoryStream = new MemoryStream())
-                                {
-                                    await formFile.CopyToAsync(memoryStream);
-                                    // Upload the file if less than 2 MB  
-                                    if (memoryStream.Length < 2097152)
-                                    {
-                                        //based on the upload file to create Image instance.  
-                                        var newImage = new MovieImages()
-                                        {
-                                            Bytes = memoryStream.ToArray(),
-                                            Description = formFile.FileName,
-                                            FileExtension = Path.GetExtension(formFile.FileName),
-                                            Size = formFile.Length,
-                                            Movie = movieToUpdate,
-                                            MovieId = movieToUpdate.Id
 
-                                        };
-                                        //add the image instance to the list.  
-                                        images.Add(newImage);
-                                    }
-                                    else
-                                    {
-                                        ModelState.AddModelError("File", "The file is too large.");
-                                    }
-                                }
-                            }
+                        // Adicionar novas imagens à lista existente
+                        if (movieToUpdate.Images == null)
+                        {
+                            movieToUpdate.Images = new List<MovieImages>();
+                        }
+
+                        foreach (var image in newImages)
+                        {
+                            movieToUpdate.Images.Add(image);
                         }
                     }
 
-                    movieToUpdate.Images = images;
-                    */
-                    _context.Update(movieToUpdate);
-                    await _context.SaveChangesAsync();
+                    if (ModelState.IsValid)
+                    {
+                        _context.Update(movieToUpdate);
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction(nameof(Index));
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -263,12 +219,8 @@ namespace MovieDataBase.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
-            //if (ModelState.IsValid && movie != null)
-            //{
-                
-            //}
+
             return View(movieToUpdate);
         }
 
@@ -293,15 +245,38 @@ namespace MovieDataBase.Controllers
         // POST: Movies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var movie = await _context.Movies.FindAsync(id);
+            // Incluir as imagens na query
+            var movie = await _context.Movies
+                .Include(m => m.Images)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
             if (movie != null)
             {
+                // Deletar todas as imagens do MinIO/Supabase
+                if (movie.Images != null && movie.Images.Any())
+                {
+                    foreach (var image in movie.Images)
+                    {
+                        try
+                        {
+                            await _storageService.DeleteImageAsync(image.imageUrl);
+                        }
+                        catch (Exception ex)
+                        {
+                            // Log do erro mas continua a deletar as outras
+                            // Podes usar ILogger aqui se tiveres configurado
+                            Console.WriteLine($"Erro ao deletar imagem {image.imageUrl}: {ex.Message}");
+                        }
+                    }
+                }
+
+                // Remover o filme (as imagens serão removidas em cascata do BD)
                 _context.Movies.Remove(movie);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
@@ -310,25 +285,17 @@ namespace MovieDataBase.Controllers
             return _context.Movies.Any(e => e.Id == id);
         }
 
-        //private void PopulateGenresDropDownList(object selectedGenre = null)
-        //{
-        //    var GenreQuery = from d in _context.Genre
-        //                           orderby d.Name
-        //                           select d;
-        //    ViewBag.Genres = new SelectList(GenreQuery.AsNoTracking(), "Id", "Name", selectedGenre);
-        //}
-
         private void PopulateGenresCheckboxes(Movies? movie = null)
         {
             var allGenres = _context.Genre;
             var selectedMovieGenres = new HashSet<int>();
-            
-            if ( movie != null && movie.MovieGenres != null)
+
+            if (movie != null && movie.MovieGenres != null)
                 selectedMovieGenres = new HashSet<int>(movie.MovieGenres.Select(g => g.GenreId));
 
             var viewModel = new List<MovieGenreData>();
 
-            foreach (var genre in allGenres) 
+            foreach (var genre in allGenres)
             {
                 viewModel.Add(new MovieGenreData
                 {
@@ -413,23 +380,78 @@ namespace MovieDataBase.Controllers
 
         }
 
-        /*
-        public IActionResult GetImage(int id)
+        [HttpGet]
+        public async Task<IActionResult> GetImageUrl(int id)
         {
-            var image = _context.MovieImages.FirstOrDefault(i => i.Id == id);
-            if (image == null || image.Bytes == null)
+            var image = await _context.MovieImages.FindAsync(id);
+
+            if (image == null)
             {
                 return NotFound();
             }
 
-            var contentType = !string.IsNullOrEmpty(image.FileExtension)
-                ? $"image/{image.FileExtension.TrimStart('.')}"
-                : "image/jpeg";
+            // Converte o caminho relativo em URL completo
+            var fullUrl = _storageService.GetFullUrl(image.imageUrl);
 
-            return File(image.Bytes, contentType);
+            return Ok(new { url = fullUrl });
         }
-        */
 
+        private async Task<List<MovieImages>> CreateImageListFromFiles(Movies movie)
+        {
+            // create a image list to store the upload files.  
+            // Upload de novas imagens para MinIO/Supabase
+            if (movie.Files != null && movie.Files.Count > 0)
+            {
+                List<MovieImages> newImages = new List<MovieImages>();
+
+                foreach (var formFile in movie.Files)
+                {
+                    if (formFile.Length > 0)
+                    {
+                        // Validar tamanho (2MB)
+                        if (formFile.Length > 2097152)
+                        {
+                            ModelState.AddModelError("Files", $"O arquivo {formFile.FileName} é muito grande. Máximo 2MB.");
+                            continue;
+                        }
+
+                        // Validar tipo de arquivo
+                        var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
+                        var extension = Path.GetExtension(formFile.FileName).ToLowerInvariant();
+
+                        if (!allowedExtensions.Contains(extension))
+                        {
+                            ModelState.AddModelError("Files", $"Tipo de arquivo não permitido: {extension}");
+                            continue;
+                        }
+
+                        try
+                        {
+                            // Upload para MinIO/Supabase e obter URL
+                            var imageUrl = await _storageService.UploadImageAsync(formFile);
+
+                            // Criar registro da imagem
+                            var newImage = new MovieImages
+                            {
+                                imageUrl = imageUrl,
+                                Movie = movie,
+                                MovieId = movie.Id
+                            };
+
+                            newImages.Add(newImage);
+                        }
+                        catch (Exception ex)
+                        {
+                            ModelState.AddModelError("Files", $"Erro ao fazer upload de {formFile.FileName}: {ex.Message}");
+                        }
+                    }
+                }
+
+                return newImages;
+            }
+
+            return new List<MovieImages>();
+        }
 
     }
 
@@ -439,4 +461,5 @@ namespace MovieDataBase.Controllers
         public string? GenreName { get; set; }
         public bool Selected { get; set; }
     }
+    
 }

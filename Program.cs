@@ -1,9 +1,26 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MovieDataBase.Data;
+using Minio;
+using MovieDataBase.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<MovieDataBaseContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MovieDataBaseContext") ?? throw new InvalidOperationException("Connection string 'MovieDataBaseContext' not found.")));
+
+// Configurar MinIO Client
+builder.Services.AddMinio(configureClient => configureClient
+    .WithEndpoint(builder.Configuration["MinIO:Endpoint"] ?? "localhost:9002")
+    .WithCredentials(
+        builder.Configuration["MinIO:AccessKey"] ?? "minioadmin",
+        builder.Configuration["MinIO:SecretKey"] ?? "minioadmin123")
+    .WithSSL(false)); // true se usar HTTPS
+
+
+
+// Registrar o serviço de storage
+// Para MinIO (desenvolvimento):
+builder.Services.AddScoped<IStorageService, MinioStorageService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
