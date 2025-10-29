@@ -35,7 +35,81 @@ else
     <h4 class="text-light">Movie Details</h4>
     <dl class="row text-light">
         <dt class="col-sm-3">Director</dt>
-        <dd class="col-sm-9">@Model.Director</dd>
+        <dd class="col-sm-9">
+            @{
+                var directorPeople = Model.PeopleRoles?
+                    .Where(pr => pr.Role != null && pr.Role.Id == 1)
+                    .Select(pr => pr.People)
+                    .Where(p => p != null)
+                    .ToList() ?? new List<MovieDataBase.Models.People>();
+
+                var writerPeople = Model.PeopleRoles?
+                    .Where(pr => pr.Role != null && pr.Role.Id == 3)
+                    .Select(pr => pr.People)
+                    .Where(p => p != null)
+                    .ToList() ?? new List<MovieDataBase.Models.People>();
+
+                var producerPeople = Model.PeopleRoles?
+                    .Where(pr => pr.Role != null && pr.Role.Id == 4)
+                    .Select(pr => pr.People)
+                    .Where(p => p != null)
+                    .ToList() ?? new List<MovieDataBase.Models.People>();
+
+            }
+
+            @* Directors (people links, comma separated). If none, fallback to Model.Director string. *@
+            @if (directorPeople.Any())
+            {
+                for (int i = 0; i < directorPeople.Count; i++)
+                {
+                    var person = directorPeople[i];
+                    if (i > 0)
+                    {
+                        @:<span class="text-light">, </span>
+                    }
+                    <a asp-controller="People" asp-action="Details" asp-route-id="@person!.Id" class="text-light">@person!.Name</a>
+                }
+
+            }
+            else
+            {
+                <em class="text-muted">Unknown</em>
+            }
+        </dd>
+
+        @* Writer (only shown if there are writer records) *@
+        @if (writerPeople.Any())
+        {
+            <dt class="col-sm-3">Writer</dt>
+            <dd class="col-sm-9">
+                @for (int i = 0; i < writerPeople.Count; i++)
+                {
+                    var person = writerPeople[i];
+                    if (i > 0)
+                    {
+                        @:<span class="text-light">, </span>
+                    }
+                    <a asp-controller="People" asp-action="Details" asp-route-id="@person!.Id" class="text-light">@person!.Name</a>
+                }
+            </dd>
+        }
+
+        @* Producer (only shown if there are producer records) *@
+        @if (producerPeople.Any())
+        {
+            <dt class="col-sm-3">Producer</dt>
+            <dd class="col-sm-9">
+                @for (int i = 0; i < producerPeople.Count; i++)
+                {
+                    var person = producerPeople[i];
+                    if (i > 0)
+                    {
+                        @:<span class="text-light">, </span>
+                    }
+                    <a asp-controller="People" asp-action="Details" asp-route-id="@person!.Id" class="text-light">@person!.Name</a>
+                }
+            </dd>
+        }
 
         <dt class="col-sm-3">Release Date</dt>
         <dd class="col-sm-9">@Model.DateReleased?.ToString("dd-MM-yyyy")</dd>
@@ -90,27 +164,56 @@ else
                 <em>No genres assigned</em>
             }
         </dd>
-
-        <dt class="col-sm-3">People / Roles</dt>
+        <hr>
+        <dt class="col-sm-3">Cast</dt>
         <dd class="col-sm-9">
             @if (Model.PeopleRoles != null && Model.PeopleRoles.Any())
             {
-                <ul class="mb-0">
-                    @foreach (var pr in Model.PeopleRoles)
-                    {
-                        <li>
-                            @pr.People?.Name
-                            @if (pr.Role != null)
-                            {
-                                @($" ({pr.Role.Name})")
-                            }
-                        </li>
-                    }
-                </ul>
+                var castList = Model.PeopleRoles
+                    .Where(pr => pr.RoleId == 2)
+                    .ToList();
+
+                @if (castList.Any())
+                {
+                    <div class="row">
+                        @foreach (var pr in castList)
+                        {
+                            var person = pr.People;
+                            var profileUrl = "/images/no-profile.png";
+                            <div class="col-12 col-md-6 mb-3">
+                                <div class="d-flex align-items-center p-2 bg-dark rounded border border-secondary">
+                                    <img src="@profileUrl"
+                                         alt="NA"
+                                         class="rounded-circle me-3"
+                                         style="width:64px;height:64px;object-fit:cover;border:2px solid #6c757d;" />
+                                    <div class="text-light">
+                                        <div class="fw-bold">
+                                            @if (person != null)
+                                            {
+                                                <a asp-controller="People" asp-action="Details" asp-route-id="@person.Id" class="text-light">
+                                                    @person.Name
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                @:<span class="text-light">Unknown</span>
+                                            }
+                                        </div>
+                                        <div class="text-secondary">@(!string.IsNullOrWhiteSpace(pr.CharacterName) ? pr.CharacterName : "<em>Character not set</em>")</div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <em>No cast assigned</em>
+                }
             }
             else
             {
-                <em>No people assigned</em>
+                <em>No cast assigned</em>
             }
         </dd>
     </dl>

@@ -92,9 +92,13 @@ namespace MovieDataBase.Controllers
             }
 
             var movie = await _context.Movies
-                .Include(mg => mg.MovieGenres)
+                .Include(mg => mg.MovieGenres!)
                 .ThenInclude(g => g.Genre)
                 .Include(mi => mi.Images)
+                .Include(pm => pm.PeopleRoles!)
+                .ThenInclude(p => p.People)
+                .Include(pm => pm.PeopleRoles!)
+                .ThenInclude(r => r.Role)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (movie == null)
@@ -107,6 +111,7 @@ namespace MovieDataBase.Controllers
             {
                 foreach (var image in movie.Images)
                 {
+                    if (image.imageUrl == null) continue;
                     image.FullUrl = _storageService.GetFullUrl(image.imageUrl);
                 }
             }
@@ -415,7 +420,7 @@ namespace MovieDataBase.Controllers
             {
                 return NotFound();
             }
-
+            
             // Converte o caminho relativo em URL completo
             var fullUrl = _storageService.GetFullUrl(image.imageUrl);
 
