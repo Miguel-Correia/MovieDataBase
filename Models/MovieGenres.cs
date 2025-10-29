@@ -1,10 +1,13 @@
-﻿namespace MovieDataBase.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MovieDataBase.Models
 {
     public class MovieGenres
     {
         public int MovieId { get; set; }
-        public Movies Movie { get; set; }
+        [Required]
+        public required Movies Movie { get; set; }
         public int GenreId { get; set; }
-        public Genre Genre { get; set; }
+        public required Genre Genre { get; set; }
     }
 }

@@ -3,10 +3,11 @@
     public class PeopleRolesInMovies
     {
         public int MovieId { get; set; }
-        public Movies Movie { get; set; }
+        public required Movies Movie { get; set; }
         public int PeopleId { get; set; }
-        public People People { get; set; }
+        public required People People { get; set; }
         public int RoleId { get; set; }
-        public Role Role { get; set; }
+        public required Role Role { get; set; }
+        public string? CharacterName { get; set; }
     }
 }

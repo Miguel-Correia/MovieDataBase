@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieDataBase.Data;
 
@@ -11,9 +12,11 @@ using MovieDataBase.Data;
 namespace MovieDataBase.Migrations
 {
     [DbContext(typeof(MovieDataBaseContext))]
-    partial class MovieDataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20251029181844_addedCharacterNameToPeopleRolesInMovies")]
+    partial class addedCharacterNameToPeopleRolesInMovies
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -318,149 +321,6 @@ namespace MovieDataBase.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("People");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Biography = "British-American filmmaker known for his cerebral, often nonlinear storytelling. Notable works include The Dark Knight trilogy, Inception, and Interstellar.",
-                            DateOfBirth = new DateTime(1970, 7, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Christopher Nolan"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Biography = "American film director and screenwriter best known for his adaptations of Stephen King novels, including The Shawshank Redemption and The Green Mile.",
-                            DateOfBirth = new DateTime(1959, 1, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Frank Darabont"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Biography = "American filmmaker known for comedy films such as Superbad and Adventureland.",
-                            DateOfBirth = new DateTime(1964, 7, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Greg Mottola"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Biography = "American filmmaker known for Forrest Gump, Back to the Future trilogy, and pioneering motion-capture animation.",
-                            DateOfBirth = new DateTime(1951, 5, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Robert Zemeckis"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Biography = "Australian filmmaker best known for creating the Mad Max franchise and directing Happy Feet.",
-                            DateOfBirth = new DateTime(1945, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "George Miller"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Biography = "South Korean filmmaker known for Parasite (winner of 4 Oscars including Best Picture), Snowpiercer, and Memories of Murder.",
-                            DateOfBirth = new DateTime(1969, 9, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Bong Joon-ho"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Biography = "British actor known for his versatility and intense method acting. Famous for Batman trilogy, American Psycho, and The Machinist.",
-                            DateOfBirth = new DateTime(1974, 1, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Christian Bale"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Biography = "Australian actor who won a posthumous Oscar for his iconic portrayal of the Joker in The Dark Knight.",
-                            DateOfBirth = new DateTime(1979, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DateOfDeath = new DateTime(2008, 1, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Heath Ledger"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Biography = "Legendary American actor and narrator with a distinctive voice. Academy Award winner known for roles in Shawshank Redemption and Million Dollar Baby.",
-                            DateOfBirth = new DateTime(1937, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Morgan Freeman"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Biography = "American actor, screenwriter, and director known for The Shawshank Redemption and Mystic River.",
-                            DateOfBirth = new DateTime(1958, 10, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Tim Robbins"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Biography = "American actor, comedian, and filmmaker. Two-time Oscar nominee known for Superbad, Moneyball, and The Wolf of Wall Street.",
-                            DateOfBirth = new DateTime(1983, 12, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Jonah Hill"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Biography = "Canadian actor known for his awkward, comedic roles in Superbad, Juno, and Scott Pilgrim vs. the World.",
-                            DateOfBirth = new DateTime(1988, 6, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Michael Cera"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            Biography = "Oscar-winning American actor and environmental activist. Known for Titanic, Inception, The Revenant, and collaborations with Scorsese.",
-                            DateOfBirth = new DateTime(1974, 11, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Leonardo DiCaprio"
-                        },
-                        new
-                        {
-                            Id = 14,
-                            Biography = "British actor known for intense physical transformations. Famous for Mad Max: Fury Road, The Dark Knight Rises, and Venom.",
-                            DateOfBirth = new DateTime(1977, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Tom Hardy"
-                        },
-                        new
-                        {
-                            Id = 15,
-                            Biography = "Canadian actor known for Juno, Inception, and The Umbrella Academy. Now known as Elliot Page.",
-                            DateOfBirth = new DateTime(1987, 2, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Ellen Page"
-                        },
-                        new
-                        {
-                            Id = 16,
-                            Biography = "Two-time Oscar winner and one of Hollywood's most beloved actors. Known for Forrest Gump, Saving Private Ryan, and Cast Away.",
-                            DateOfBirth = new DateTime(1956, 7, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Tom Hanks"
-                        },
-                        new
-                        {
-                            Id = 17,
-                            Biography = "South African-American actress and producer. Oscar winner known for Monster, Mad Max: Fury Road, and Atomic Blonde.",
-                            DateOfBirth = new DateTime(1975, 8, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Charlize Theron"
-                        },
-                        new
-                        {
-                            Id = 18,
-                            Biography = "Oscar-winning American actor known for Dallas Buyers Club, Interstellar, and True Detective.",
-                            DateOfBirth = new DateTime(1969, 11, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Matthew McConaughey"
-                        },
-                        new
-                        {
-                            Id = 19,
-                            Biography = "Oscar-winning American actress known for The Devil Wears Prada, Les Misérables, and Interstellar.",
-                            DateOfBirth = new DateTime(1982, 11, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Anne Hathaway"
-                        },
-                        new
-                        {
-                            Id = 20,
-                            Biography = "South Korean actor and Bong Joon-ho's frequent collaborator. Known for Parasite, Memories of Murder, and The Host.",
-                            DateOfBirth = new DateTime(1967, 1, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Song Kang-ho"
-                        });
                 });
 
             modelBuilder.Entity("MovieDataBase.Models.PeopleRolesInMovies", b =>
@@ -484,168 +344,6 @@ namespace MovieDataBase.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("PeopleRolesInMovies");
-
-                    b.HasData(
-                        new
-                        {
-                            MovieId = 1,
-                            PeopleId = 1,
-                            RoleId = 1
-                        },
-                        new
-                        {
-                            MovieId = 1,
-                            PeopleId = 7,
-                            RoleId = 2,
-                            CharacterName = "Bruce Wayne / Batman"
-                        },
-                        new
-                        {
-                            MovieId = 1,
-                            PeopleId = 8,
-                            RoleId = 2,
-                            CharacterName = "The Joker"
-                        },
-                        new
-                        {
-                            MovieId = 1,
-                            PeopleId = 9,
-                            RoleId = 2,
-                            CharacterName = "Lucius Fox"
-                        },
-                        new
-                        {
-                            MovieId = 2,
-                            PeopleId = 2,
-                            RoleId = 1
-                        },
-                        new
-                        {
-                            MovieId = 2,
-                            PeopleId = 10,
-                            RoleId = 2,
-                            CharacterName = "Andy Dufresne"
-                        },
-                        new
-                        {
-                            MovieId = 2,
-                            PeopleId = 9,
-                            RoleId = 2,
-                            CharacterName = "Ellis Boyd 'Red' Redding"
-                        },
-                        new
-                        {
-                            MovieId = 3,
-                            PeopleId = 3,
-                            RoleId = 1
-                        },
-                        new
-                        {
-                            MovieId = 3,
-                            PeopleId = 11,
-                            RoleId = 2,
-                            CharacterName = "Seth"
-                        },
-                        new
-                        {
-                            MovieId = 3,
-                            PeopleId = 12,
-                            RoleId = 2,
-                            CharacterName = "Evan"
-                        },
-                        new
-                        {
-                            MovieId = 4,
-                            PeopleId = 1,
-                            RoleId = 1
-                        },
-                        new
-                        {
-                            MovieId = 4,
-                            PeopleId = 13,
-                            RoleId = 2,
-                            CharacterName = "Dom Cobb"
-                        },
-                        new
-                        {
-                            MovieId = 4,
-                            PeopleId = 14,
-                            RoleId = 2,
-                            CharacterName = "Eames"
-                        },
-                        new
-                        {
-                            MovieId = 4,
-                            PeopleId = 15,
-                            RoleId = 2,
-                            CharacterName = "Ariadne"
-                        },
-                        new
-                        {
-                            MovieId = 5,
-                            PeopleId = 4,
-                            RoleId = 1
-                        },
-                        new
-                        {
-                            MovieId = 5,
-                            PeopleId = 16,
-                            RoleId = 2,
-                            CharacterName = "Forrest Gump"
-                        },
-                        new
-                        {
-                            MovieId = 6,
-                            PeopleId = 5,
-                            RoleId = 1
-                        },
-                        new
-                        {
-                            MovieId = 6,
-                            PeopleId = 14,
-                            RoleId = 2,
-                            CharacterName = "Max Rockatansky"
-                        },
-                        new
-                        {
-                            MovieId = 6,
-                            PeopleId = 17,
-                            RoleId = 2,
-                            CharacterName = "Imperator Furiosa"
-                        },
-                        new
-                        {
-                            MovieId = 7,
-                            PeopleId = 1,
-                            RoleId = 1
-                        },
-                        new
-                        {
-                            MovieId = 7,
-                            PeopleId = 18,
-                            RoleId = 2,
-                            CharacterName = "Cooper"
-                        },
-                        new
-                        {
-                            MovieId = 7,
-                            PeopleId = 19,
-                            RoleId = 2,
-                            CharacterName = "Brand"
-                        },
-                        new
-                        {
-                            MovieId = 8,
-                            PeopleId = 6,
-                            RoleId = 1
-                        },
-                        new
-                        {
-                            MovieId = 8,
-                            PeopleId = 20,
-                            RoleId = 2,
-                            CharacterName = "Kim Ki-taek"
-                        });
                 });
 
             modelBuilder.Entity("MovieDataBase.Models.Role", b =>
@@ -663,28 +361,6 @@ namespace MovieDataBase.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Role");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Director"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Actor"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Writer"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Producer"
-                        });
                 });
 
             modelBuilder.Entity("MovieDataBase.Models.MovieGenres", b =>
