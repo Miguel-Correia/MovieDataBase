@@ -1,6 +1,5 @@
 ﻿@model IEnumerable<MovieDataBase.Models.Movies>
 
-<h1 class="mb-4 text-light">Movie Catalog</h1>
 <a asp-action="Create" class="btn btn-primary mt-4">+ Add New Movie</a>
 <hr class="border-secondary" />
 
@@ -47,7 +46,7 @@
                     {
                         <p class="card-text">
                             <small class="text-muted">
-                                Released: @movie.DateReleased.Value.ToString("yyyy-MM-dd")
+                                Released: @movie.DateReleased.Value.ToString("dd-MM-yyyy")
                             </small>
                         </p>
                     }
