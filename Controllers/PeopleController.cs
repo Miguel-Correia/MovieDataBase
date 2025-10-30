@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MovieDataBase.Data;
 using MovieDataBase.Models;
+using MovieDataBase.Services;
 
 namespace MovieDataBase.Controllers
 {
     public class PeopleController : Controller
     {
         private readonly MovieDataBaseContext _context;
+        private readonly IStorageService _storageService;
 
-        public PeopleController(MovieDataBaseContext context)
+        public PeopleController(MovieDataBaseContext context, IStorageService storageService)
         {
             _context = context;
+            _storageService = storageService;
         }
 
         // GET: People
@@ -34,10 +37,33 @@ namespace MovieDataBase.Controllers
             }
 
             var people = await _context.People
+                .Include(p => p.MovieRoles!)
+                    .ThenInclude(pr => pr.Role)
+                .Include(p => p.MovieRoles!)
+                    .ThenInclude(pr => pr.Movie!)
+                        .ThenInclude(m => m.Images)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (people == null)
             {
                 return NotFound();
+            }
+
+            // Preencher FullUrl para imagens dos filmes associados (se existirem)
+            if (people.MovieRoles != null)
+            {
+                foreach (var pr in people.MovieRoles)
+                {
+                    var movie = pr.Movie;
+                    if (movie?.Images != null)
+                    {
+                        foreach (var image in movie.Images)
+                        {
+                            if (image.imageUrl == null) continue;
+                            image.FullUrl = _storageService.GetFullUrl(image.imageUrl);
+                        }
+                    }
+                }
             }
 
             return View(people);

@@ -1,42 +1,101 @@
 ﻿@model MovieDataBase.Models.People
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = Model?.Name ?? "Person";
 }
 
-<h1>Details</h1>
+<div class="mb-4">
+    <div class="d-flex align-items-start bg-dark p-4 rounded border border-secondary">
+        <img src="/images/no-profile.svg"
+             alt="@Model?.Name"
+             class="rounded-circle me-4"
+             style="width:140px;height:140px;object-fit:cover;border:3px solid #6c757d;" />
 
-<div>
-    <h4>People</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateOfBirth)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateOfBirth)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateOfDeath)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateOfDeath)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Biography)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Biography)
-        </dd>
-    </dl>
+        <div class="flex-grow-1">
+            <h1 class="text-light mb-1">@Model?.Name</h1>
+            <div class="text-secondary mb-2">
+                @if (Model?.DateOfBirth != null)
+                {
+                    <span>Born: @Model.DateOfBirth.ToString("dd-MM-yyyy")</span>
+                }
+                @if (Model?.DateOfDeath != null)
+                {
+                    <span class="ms-3">Died: @Model.DateOfDeath.Value.ToString("dd-MM-yyyy")</span>
+                }
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(Model?.Biography))
+            {
+                <p class="text-light mb-0">@Model.Biography</p>
+            }
+            else
+            {
+                <p class="text-muted mb-0"><em>No biography available.</em></p>
+            }
+        </div>
+
+        <div class="ms-4 text-end">
+            <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning mb-2">Edit</a>
+            <br />
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+<div class="mb-4">
+    <h4 class="text-light">Filmography</h4>
+
+    @if (Model?.MovieRoles != null && Model.MovieRoles.Any(pr => pr.Movie != null))
+    {
+        // Agrupar por filme (um filme pode ter múltiplos papéis)
+        var movieGroups = Model.MovieRoles
+            .Where(pr => pr.Movie != null)
+            .GroupBy(pr => pr.Movie!)
+            .Select(g => new {
+                Movie = g.Key,
+                Roles = g.Select(pr => pr.Role?.Name ?? pr.CharacterName ?? "Cast").Where(r => !string.IsNullOrWhiteSpace(r)).Distinct().ToList()
+            })
+            .ToList();
+
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            @foreach (var mg in movieGroups)
+            {
+                var movie = mg.Movie;
+                var poster = movie.Images != null && movie.Images.Any() ? movie.Images.First().FullUrl ?? movie.Images.First().imageUrl : "/images/no-poster.svg";
+                <div class="col">
+                    <div class="card h-100 shadow-sm bg-dark border-secondary">
+                        <img src="@poster"
+                             class="card-img-top"
+                             alt="@movie.Title"
+                             style="object-fit: cover; height: 300px;" />
+                        <div class="card-body">
+                            <h5 class="card-title text-light">
+                                <a asp-controller="Movies" asp-action="Details" asp-route-id="@movie.Id" class="people-link">
+                                    @movie.Title
+                                </a>
+                            </h5>
+                            <p class="card-text text-secondary mb-1">
+                                @if (mg.Roles != null && mg.Roles.Any())
+                                {
+                                    @string.Join(", ", mg.Roles)
+                                }
+                                else
+                                {
+                                    <em>Role not specified</em>
+                                }
+                            </p>
+                            @if (movie.DateReleased.HasValue)
+                            {
+                                <small class="text-muted">Released: @movie.DateReleased.Value.ToString("dd-MM-yyyy")</small>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="text-muted"><em>No filmography available.</em></p>
+    }
 </div>

@@ -67,7 +67,7 @@ else
                     {
                         @:<span class="text-light">, </span>
                     }
-                    <a asp-controller="People" asp-action="Details" asp-route-id="@person!.Id" class="text-light">@person!.Name</a>
+                    <a asp-controller="People" asp-action="Details" asp-route-id="@person!.Id" class="people-link">@person!.Name</a>
                 }
 
             }
@@ -89,7 +89,7 @@ else
                     {
                         @:<span class="text-light">, </span>
                     }
-                    <a asp-controller="People" asp-action="Details" asp-route-id="@person!.Id" class="text-light">@person!.Name</a>
+                    <a asp-controller="People" asp-action="Details" asp-route-id="@person!.Id" class="people-link">@person!.Name</a>
                 }
             </dd>
         }
@@ -106,7 +106,7 @@ else
                     {
                         @:<span class="text-light">, </span>
                     }
-                    <a asp-controller="People" asp-action="Details" asp-route-id="@person!.Id" class="text-light">@person!.Name</a>
+                    <a asp-controller="People" asp-action="Details" asp-route-id="@person!.Id" class="people-link">@person!.Name</a>
                 }
             </dd>
         }
@@ -179,7 +179,7 @@ else
                         @foreach (var pr in castList)
                         {
                             var person = pr.People;
-                            var profileUrl = "/images/no-profile.png";
+                            var profileUrl = "/images/no-profile.svg";
                             <div class="col-12 col-md-6 mb-3">
                                 <div class="d-flex align-items-center p-2 bg-dark rounded border border-secondary">
                                     <img src="@profileUrl"
@@ -190,7 +190,7 @@ else
                                         <div class="fw-bold">
                                             @if (person != null)
                                             {
-                                                <a asp-controller="People" asp-action="Details" asp-route-id="@person.Id" class="text-light">
+                                                <a asp-controller="People" asp-action="Details" asp-route-id="@person.Id" class="people-link">
                                                     @person.Name
                                                 </a>
                                             }

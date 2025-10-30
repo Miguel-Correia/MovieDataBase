@@ -75,13 +75,15 @@ footer {
     border-color: #e50914;
 }
 
-/* Links */
-a {
-    color: #e50914;
+
+/* Destaque para links que apontam para People (atores, directors, etc.)*/
+a[href*="/People"] {
+    color: #0071eb !important; 
+    font-weight: 600;
     text-decoration: none;
 }
 
-    a:hover {
-        color: #f6121d;
-        text-decoration: underline;
-    }
+a[href*="/People"]:hover {
+    color: #0071eb !important;
+    text-decoration: underline;
+}
