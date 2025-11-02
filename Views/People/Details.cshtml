@@ -95,6 +95,10 @@
     }
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning">Edit</a>
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning" title="Edit" aria-label="Edit">
+        <i class="bi bi-pencil-fill"></i>
+    </a>
+    <a asp-action="Index" class="btn btn-secondary" title="Back to list" aria-label="Back to list">
+        <i class="bi bi-arrow-left-circle-fill"></i>
+    </a>
 </div>

@@ -1,60 +1,37 @@
-/* General background & text colors */
+/* Global variables */
+:root{
+    --poster-height: 420px;
+    --card-footer-height: 56px;
+    --accent-red: #e50914;
+    --muted: #b3b3b3;
+}
+
+/* Base */
 body {
     background-color: #0d0d0d;
     color: #e5e5e5;
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
 
-/* Navbar - darker and sleek */
+/* Navbar & footer */
 .navbar {
     background: linear-gradient(90deg, #000000 0%, #141414 100%) !important;
 }
-
-/* Footer */
 footer {
     background-color: #141414 !important;
     font-size: 0.9rem;
 }
 
-/* Movie cards */
-.card {
-    background-color: #1a1a1a;
-    border: none;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-    .card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 6px 20px rgba(255, 0, 0, 0.2);
-    }
-
-.card-title {
-    color: #ffffff;
-}
-
-.card-text {
-    color: #b3b3b3;
-}
-
-/* Buttons */
+/* Buttons (kept simple) */
 .btn-primary {
-    background-color: #e50914;
-    border-color: #e50914;
+    background-color: var(--accent-red);
+    border-color: var(--accent-red);
 }
+.btn-primary:hover { background-color: #f6121d; border-color: #f6121d; }
 
-    .btn-primary:hover {
-        background-color: #f6121d;
-        border-color: #f6121d;
-    }
-
-.btn-warning {
-    background-color: #ffb300;
-    border-color: #ffb300;
-}
-
-.btn-info {
-    background-color: #0071eb;
-    border-color: #0071eb;
-}
+.btn-warning { background-color: #ffb300; border-color: #ffb300; }
+.btn-info { background-color: #0071eb; border-color: #0071eb; }
 
 /* Forms */
 .form-control, .form-select {
@@ -62,28 +39,131 @@ footer {
     border: 1px solid #333;
     color: #ffffff;
 }
-
-    .form-control:focus, .form-select:focus {
-        background-color: #1c1c1c;
-        border-color: #e50914;
-        box-shadow: 0 0 0 0.2rem rgba(229, 9, 20, 0.25);
-    }
-
-/* Genre checkboxes */
-.form-check-input:checked {
-    background-color: #e50914;
-    border-color: #e50914;
+.form-control:focus, .form-select:focus {
+    border-color: var(--accent-red);
+    box-shadow: 0 0 0 0.2rem rgba(229,9,20,0.25);
 }
 
+/* Links */
+a { color: var(--accent-red); text-decoration: none; }
+a:hover { color: #f6121d; text-decoration: underline; }
 
-/* Destaque para links que apontam para People (atores, directors, etc.)*/
+/* People links */
 .people-link {
-    color: #0071eb !important; 
+    color: #0071eb !important;
     font-weight: 600;
     text-decoration: none;
 }
+.people-link:hover { color: #0071eb !important; text-decoration: underline; }
 
-.people-link:hover {
-    color: #0071eb !important;
-    text-decoration: underline;
+/* Card basics */
+.card {
+    background-color: #1a1a1a;
+    border: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card:hover { transform: translateY(-4px); box-shadow: 0 6px 20px rgba(255,0,0,0.12); }
+
+.card-title { color: #ffffff; }
+.card-text { color: var(--muted); }
+
+/* director text: smaller and truncated to avoid overlap */
+.card .director-text {
+    font-size: 0.85rem;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+@media (max-width:576px){ .card .director-text { white-space: normal; } }
+
+/* Poster sizing utilities */
+.poster-img, .card.hover-reveal .card-img-top,
+.card.hover-reveal .carousel,
+.card.hover-reveal .carousel-inner,
+.card.hover-reveal .carousel-item img {
+    width: 100%;
+    height: var(--poster-height);
+    object-fit: cover;
+}
+
+/* Hover-reveal pattern */
+.card.hover-reveal {
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+}
+
+/* reveal-content common */
+.card.hover-reveal .reveal-content {
+    position: absolute;
+    left: 0;
+    right: 0;
+    transform: translateY(100%);
+    transition: transform 250ms ease, opacity 250ms ease;
+    opacity: 0;
+    z-index: 20;
+    padding: 1rem;
+}
+
+/* Footer: pinned to bottom, reserved height */
+.card.hover-reveal .card-footer.reveal-content {
+    height: var(--card-footer-height);
+    bottom: 0;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(180deg, rgba(0,0,0,0.75), rgba(0,0,0,0.82));
+    border-top: 1px solid rgba(255,255,255,0.02);
+    box-shadow: 0 -14px 36px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+}
+
+/* Body: sits above footer */
+.card.hover-reveal .card-body.reveal-content {
+    bottom: var(--card-footer-height);
+    padding-bottom: 0.75rem;
+    background: linear-gradient(180deg, rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.7) 60%);
+    max-height: calc(var(--poster-height) - var(--card-footer-height) - 1rem);
+    overflow: hidden;
+    box-shadow: 0 -6px 24px rgba(0,0,0,0.55) inset;
+}
+
+/* Reveal on hover */
+.card.hover-reveal:hover .reveal-content {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* Carousel controls: hidden until hover */
+.card.hover-reveal .carousel-control-prev,
+.card.hover-reveal .carousel-control-next {
+    opacity: 0;
+    transition: opacity 180ms ease;
+    z-index: 30;
+}
+.card.hover-reveal:hover .carousel-control-prev,
+.card.hover-reveal:hover .carousel-control-next { opacity: 1; }
+
+/* Title and director subtle shadows */
+.card.hover-reveal .card-title { text-shadow: 0 6px 18px rgba(0,0,0,0.6); }
+.card.hover-reveal .director-text { text-shadow: 0 3px 8px rgba(0,0,0,0.55); }
+
+/* Footer buttons: visual balance with title */
+.card.hover-reveal .card-footer.reveal-content .btn,
+.card.hover-reveal .card-footer.reveal-content .btn i {
+    text-shadow: 0 6px 18px rgba(0,0,0,0.45);
+    filter: drop-shadow(0 6px 18px rgba(0,0,0,0.35));
+}
+.card.hover-reveal .card-footer.reveal-content .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+}
+
+/* icon contrast inside colored buttons */
+.card.hover-reveal .card-footer.reveal-content .btn-warning i,
+.card.hover-reveal .card-footer.reveal-content .btn-info i,
+.card.hover-reveal .card-footer.reveal-content .btn-danger i {
+    color: #111;
 }

@@ -7,7 +7,7 @@
     @foreach (var movie in Model)
     {
         <div class="col">
-            <div class="card h-100 shadow-sm bg-dark border-secondary">
+            <div class="card h-100 shadow-sm bg-dark border-secondary hover-reveal">
 
                 @if (movie.Images != null && movie.Images.Any())
                 {
@@ -18,8 +18,7 @@
                                 var img = movie.Images[i];
                                 <div class="carousel-item @(i == 0 ? "active" : "")">
                                     <img src="@img.FullUrl"
-                                         class="d-block w-100"
-                                         style="object-fit: cover; height: 300px;" />
+                                         class="d-block w-100 poster-img" />
                                 </div>
                             }
                         </div>
@@ -34,28 +33,29 @@
                 else
                 {
                     <img src="/images/no-poster.svg"
-                         class="card-img-top"
-                         alt="@movie.Title"
-                         style="object-fit: cover; height: 300px;" />
+                         class="card-img-top poster-img"
+                         alt="@movie.Title" />
                 }
 
-                <div class="card-body">
-                    <h5 class="card-title text-light">@movie.Title</h5>
-                    <p class="card-text text-secondary">Directed by: @movie.Director</p>
-                    @if (movie.DateReleased.HasValue)
-                    {
-                        <p class="card-text">
-                            <small class="text-muted">
-                                Released: @movie.DateReleased.Value.ToString("dd-MM-yyyy")
-                            </small>
-                        </p>
-                    }
+                <div class="card-body reveal-content">
+                    <h5 class="card-title">
+                        <a asp-action="Details" asp-route-id="@movie.Id" class="text-light" title="@movie.Title">
+                            @movie.Title
+                        </a>
+                    </h5>
+                    <p class="card-text text-secondary director-text">Directed by: @movie.Director</p>
                 </div>
 
-                <div class="card-footer d-flex justify-content-between bg-transparent border-secondary">
-                    <a asp-action="Edit" asp-route-id="@movie.Id" class="btn btn-sm btn-warning">Edit</a>
-                    <a asp-action="Details" asp-route-id="@movie.Id" class="btn btn-sm btn-info text-white">Details</a>
-                    <a asp-action="Delete" asp-route-id="@movie.Id" class="btn btn-sm btn-danger">Delete</a>
+                <div class="card-footer reveal-content d-flex justify-content-between bg-transparent border-secondary">
+                    <a asp-action="Edit" asp-route-id="@movie.Id" class="btn btn-sm btn-warning" title="Edit" aria-label="Edit">
+                        <i class="bi bi-pencil-fill"></i>
+                    </a>
+                    <a asp-action="Details" asp-route-id="@movie.Id" class="btn btn-sm btn-info text-white" title="Details" aria-label="Details">
+                        <i class="bi bi-info-circle-fill"></i>
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@movie.Id" class="btn btn-sm btn-danger" title="Delete" aria-label="Delete">
+                        <i class="bi bi-trash-fill"></i>
+                    </a>
                 </div>
             </div>
         </div>
