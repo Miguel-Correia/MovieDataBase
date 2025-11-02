@@ -46,17 +46,25 @@
                     <p class="card-text text-secondary director-text">Directed by: @movie.Director</p>
                 </div>
 
-                <div class="card-footer reveal-content d-flex justify-content-between bg-transparent border-secondary">
-                    <a asp-action="Edit" asp-route-id="@movie.Id" class="btn btn-sm btn-warning" title="Edit" aria-label="Edit">
-                        <i class="bi bi-pencil-fill"></i>
-                    </a>
-                    <a asp-action="Details" asp-route-id="@movie.Id" class="btn btn-sm btn-info text-white" title="Details" aria-label="Details">
-                        <i class="bi bi-info-circle-fill"></i>
-                    </a>
-                    <a asp-action="Delete" asp-route-id="@movie.Id" class="btn btn-sm btn-danger" title="Delete" aria-label="Delete">
-                        <i class="bi bi-trash-fill"></i>
-                    </a>
+                <div class="card-footer reveal-content d-flex justify-content-between align-items-center bg-transparent border-secondary">
+                    <div>
+                        @if (movie.DateReleased.HasValue)
+                        {
+                            <small class="text-muted">Released: @movie.DateReleased.Value.ToString("dd-MM-yyyy")</small>
+                        }
+                    </div>
+
+                    <div>
+                        @{
+                            var ratingDisplay = MovieDataBase.Models.EnumHelpers.GetDisplayName(movie.ContentRating);
+                        }
+                        @if (!string.IsNullOrWhiteSpace(ratingDisplay))
+                        {
+                            <span class="badge bg-secondary">@ratingDisplay</span>
+                        }
+                    </div>
                 </div>
+
             </div>
         </div>
     }

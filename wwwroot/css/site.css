@@ -106,28 +106,35 @@ a:hover { color: #f6121d; text-decoration: underline; }
     padding: 1rem;
 }
 
-/* Footer: pinned to bottom, reserved height */
+/* Footer: pinned to bottom, reserved height.
+   Use background endpoint matching the body final color and remove inset shadows
+   para evitar uma linha de separação perceptível. Um pequeno overlap (margin-top)
+   garante que qualquer pixel remanescente fique coberto. */
 .card.hover-reveal .card-footer.reveal-content {
     height: var(--card-footer-height);
     bottom: 0;
+    margin-top: -1px; /* ligeiro overlap para esconder seam residual */
     padding-left: 1rem;
     padding-right: 1rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: linear-gradient(180deg, rgba(0,0,0,0.75), rgba(0,0,0,0.82));
-    border-top: 1px solid rgba(255,255,255,0.02);
-    box-shadow: 0 -14px 36px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+    /* fundo sólido/gradiente compacto, com o mesmo tom final do body */
+    background: linear-gradient(180deg, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.78) 100%);
+    border-top: none;
+    box-shadow: 0 -10px 30px rgba(0,0,0,0.45); /* suaviza a transição sem criar linha */
 }
 
-/* Body: sits above footer */
+/* Body: sits above footer.
+   Gradiente finaliza exatamente na mesma opacidade usada pelo footer para evitar seam. */
 .card.hover-reveal .card-body.reveal-content {
     bottom: var(--card-footer-height);
     padding-bottom: 0.75rem;
-    background: linear-gradient(180deg, rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.7) 60%);
+    background: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.72) 60%, rgba(0,0,0,0.78) 100%);
     max-height: calc(var(--poster-height) - var(--card-footer-height) - 1rem);
     overflow: hidden;
-    box-shadow: 0 -6px 24px rgba(0,0,0,0.55) inset;
+    /* remover inset shadow forte para evitar linha; manter leve suavização */
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.25) inset;
 }
 
 /* Reveal on hover */
