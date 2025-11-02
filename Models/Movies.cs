@@ -15,7 +15,7 @@ namespace MovieDataBase.Models
         [DataType(DataType.MultilineText)]
         public string? Description { get; set; }
         public int? Runtime { get; set; }
-        public string? ContentRating { get; set; }
+        public ContentRating? ContentRating { get; set; }
         public int? CritiqueScore { get; set; }
         [Display(Name = "Genres")]
         public List<MovieGenres>? MovieGenres { get; set; }

@@ -4,6 +4,8 @@ using System.Drawing;
 using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Reflection;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -124,6 +126,7 @@ namespace MovieDataBase.Controllers
         public IActionResult Create()
         {
             PopulateGenresCheckboxes();
+            PopulateContentRatings();
             return View();
         }
 
@@ -148,6 +151,9 @@ namespace MovieDataBase.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            // repopula selects se houver erro
+            PopulateGenresCheckboxes(movie);
+            PopulateContentRatings(movie);
             return View(movie);
         }
 
@@ -171,7 +177,7 @@ namespace MovieDataBase.Controllers
             }
 
             PopulateGenresCheckboxes(movie);
-
+            PopulateContentRatings(movie);
 
             return View(movie);
         }
@@ -252,6 +258,9 @@ namespace MovieDataBase.Controllers
                 }
             }
 
+            // repopula selects antes de devolver a view em caso de falha
+            PopulateGenresCheckboxes(movieToUpdate);
+            PopulateContentRatings(movieToUpdate);
             return View(movieToUpdate);
         }
 
@@ -484,6 +493,18 @@ namespace MovieDataBase.Controllers
             return new List<MovieImages>();
         }
 
+        private void PopulateContentRatings(Movies? movie = null)
+        {
+            var values = Enum.GetValues(typeof(ContentRating)).Cast<ContentRating>();
+            var items = values.Select(v => new SelectListItem
+            {
+                Value = v.ToString(),
+                Text = MovieDataBase.Models.EnumHelpers.GetDisplayName(v)
+            }).ToList();
+
+            var selectedValue = movie?.ContentRating?.ToString();
+            ViewBag.ContentRatings = new SelectList(items, "Value", "Text", selectedValue);
+        }
     }
 
     public class MovieGenreData

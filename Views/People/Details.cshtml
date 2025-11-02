@@ -4,6 +4,7 @@
     ViewData["Title"] = Model?.Name ?? "Person";
 }
 
+
 <div class="mb-4">
     <div class="d-flex align-items-start bg-dark p-4 rounded border border-secondary">
         <img src="/images/no-profile.svg"
@@ -33,12 +34,6 @@
                 <p class="text-muted mb-0"><em>No biography available.</em></p>
             }
         </div>
-
-        <div class="ms-4 text-end">
-            <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning mb-2">Edit</a>
-            <br />
-            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-        </div>
     </div>
 </div>
 
@@ -57,7 +52,7 @@
             })
             .ToList();
 
-        <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="row row-cols-1 row-cols-md-5 g-4">
             @foreach (var mg in movieGroups)
             {
                 var movie = mg.Movie;
@@ -98,4 +93,8 @@
     {
         <p class="text-muted"><em>No filmography available.</em></p>
     }
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </div>

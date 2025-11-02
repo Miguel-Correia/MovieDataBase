@@ -131,9 +131,12 @@ else
 
         <dt class="col-sm-3">Content Rating</dt>
         <dd class="col-sm-9">
-            @if (!string.IsNullOrWhiteSpace(Model.ContentRating))
+            @{
+                var ratingDisplay = MovieDataBase.Models.EnumHelpers.GetDisplayName(Model.ContentRating);
+            }
+            @if (!string.IsNullOrWhiteSpace(ratingDisplay))
             {
-                @Model.ContentRating
+                @ratingDisplay
             }
             else
             {

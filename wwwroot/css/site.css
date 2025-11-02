@@ -77,13 +77,13 @@ footer {
 
 
 /* Destaque para links que apontam para People (atores, directors, etc.)*/
-a[href*="/People"] {
+.people-link {
     color: #0071eb !important; 
     font-weight: 600;
     text-decoration: none;
 }
 
-a[href*="/People"]:hover {
+.people-link:hover {
     color: #0071eb !important;
     text-decoration: underline;
 }

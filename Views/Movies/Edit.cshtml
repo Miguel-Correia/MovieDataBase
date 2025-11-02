@@ -38,7 +38,9 @@
 
     <div class="mb-3">
         <label asp-for="ContentRating" class="form-label"></label>
-        <input asp-for="ContentRating" class="form-control" />
+        <select asp-for="ContentRating" class="form-select" asp-items="ViewBag.ContentRatings">
+            <option value="">Select rating</option>
+        </select>
         <span asp-validation-for="ContentRating" class="text-danger"></span>
     </div>
 

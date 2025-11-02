@@ -56,7 +56,7 @@ namespace MovieDataBase.Data
                     DateReleased = new DateOnly(2008, 7, 18), 
                     Description = "Batman faces the Joker, a criminal mastermind who wants to plunge Gotham City into anarchy.", 
                     Runtime = 152, 
-                    ContentRating = "PG-13", 
+                    ContentRating = ContentRating.PG13, 
                     CritiqueScore = 94 
                 },
                 new Movies 
@@ -67,7 +67,7 @@ namespace MovieDataBase.Data
                     DateReleased = new DateOnly(1994, 9, 23), 
                     Description = "Two imprisoned men bond over years, finding solace and eventual redemption through acts of common decency.", 
                     Runtime = 142, 
-                    ContentRating = "R", 
+                    ContentRating = ContentRating.R, 
                     CritiqueScore = 91 
                 },
                 new Movies 
@@ -78,7 +78,7 @@ namespace MovieDataBase.Data
                     DateReleased = new DateOnly(2007, 8, 17), 
                     Description = "Two co-dependent high school seniors are forced to deal with separation anxiety after their plan to stage a booze-soaked party goes awry.", 
                     Runtime = 113, 
-                    ContentRating = "R", 
+                    ContentRating = ContentRating.R, 
                     CritiqueScore = 88 
                 },
                 new Movies 
@@ -89,7 +89,7 @@ namespace MovieDataBase.Data
                     DateReleased = new DateOnly(2010, 7, 16), 
                     Description = "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea.", 
                     Runtime = 148, 
-                    ContentRating = "PG-13", 
+                    ContentRating = ContentRating.PG13, 
                     CritiqueScore = 87 
                 },
                 new Movies 
@@ -100,7 +100,7 @@ namespace MovieDataBase.Data
                     DateReleased = new DateOnly(1994, 7, 6), 
                     Description = "The presidencies of Kennedy and Johnson, the Vietnam War, and other historical events unfold from the perspective of an Alabama man.", 
                     Runtime = 142, 
-                    ContentRating = "PG-13", 
+                    ContentRating = ContentRating.PG13, 
                     CritiqueScore = 71 
                 },
                 new Movies 
@@ -111,7 +111,7 @@ namespace MovieDataBase.Data
                     DateReleased = new DateOnly(2015, 5, 15), 
                     Description = "In a post-apocalyptic wasteland, a woman rebels against a tyrannical ruler in search for her homeland with the aid of a group of female prisoners.", 
                     Runtime = 120, 
-                    ContentRating = "R", 
+                    ContentRating = ContentRating.R, 
                     CritiqueScore = 97 
                 },
                 new Movies 
@@ -122,7 +122,7 @@ namespace MovieDataBase.Data
                     DateReleased = new DateOnly(2014, 11, 7), 
                     Description = "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.", 
                     Runtime = 169, 
-                    ContentRating = "PG-13", 
+                    ContentRating = ContentRating.PG13, 
                     CritiqueScore = 72 
                 },
                 new Movies 
@@ -133,7 +133,7 @@ namespace MovieDataBase.Data
                     DateReleased = new DateOnly(2019, 5, 30), 
                     Description = "Greed and class discrimination threaten the newly formed symbiotic relationship between the wealthy Park family and the destitute Kim clan.", 
                     Runtime = 132, 
-                    ContentRating = "R", 
+                    ContentRating = ContentRating.R, 
                     CritiqueScore = 96 
                 }
             );
@@ -580,6 +580,11 @@ namespace MovieDataBase.Data
 			    new { MovieId = 8, PeopleId = 39, RoleId = 4, CharacterName = (string?)null },  // Kwak Sin-ae - Producer
 			    new { MovieId = 8, PeopleId = 40, RoleId = 4, CharacterName = (string?)null }   // Jang Young-hwan - Producer
 			);
+
+            // Persistir ContentRating enum como string no DB
+            modelBuilder.Entity<MovieDataBase.Models.Movies>()
+                .Property(m => m.ContentRating)
+                .HasConversion<string>();
 
             base.OnModelCreating(modelBuilder);
         }
