@@ -35,47 +35,46 @@ namespace MovieDataBase.Controllers
             ViewData["DateSortParam"] = sortOrder == "date" ? "date_desc" : "date";
             ViewData["CurrentSearch"] = searchString;
 
-            var movies = await _context.Movies.Include(i => i.Images)
-                                                .Include(g => g.MovieGenres)
-                                                .ThenInclude(mg => mg.Genre)
-                                                .ToListAsync();
+            // Query base
+            var query = _context.Movies
+                .Include(m => m.Images.Where(i => i.IsMoviePoster == true)) // Filtra posters no EF Core 5+
+                .Include(m => m.MovieGenres)
+                    .ThenInclude(mg => mg.Genre)
+                .AsQueryable();
 
+            // Filtro de pesquisa
             if (!String.IsNullOrWhiteSpace(searchString))
             {
-                movies = movies.Where(i => i.Title.Contains(searchString)).ToList();
+                query = query.Where(m => m.Title != null && m.Title.Contains(searchString));
             }
 
+            // Filtro de géneros
             if (selectedGenres.Length > 0)
             {
-                movies = movies.Where(m => m.MovieGenres.Any(mg => selectedGenres.Contains(mg.GenreId))).ToList();
+                query = query.Where(m => m.MovieGenres != null && m.MovieGenres.Any(mg => selectedGenres.Contains(mg.GenreId)));
             }
 
-            switch (sortOrder)
+            // Ordenação
+            query = sortOrder switch
             {
-                case "name_desc":
-                    movies = movies.OrderByDescending(m => m.Title).ToList();
-                    break;
-                case "date":
-                    movies = movies.OrderBy(m => m.DateReleased).ToList();
-                    break;
-                case "date_desc":
-                    movies = movies.OrderByDescending(m => m.DateReleased).ToList();
-                    break;
-                default:
-                    movies = movies.OrderBy(m => m.Title).ToList();
-                    break;
-            }
+                "name_desc" => query.OrderByDescending(m => m.Title),
+                "date" => query.OrderBy(m => m.DateReleased),
+                "date_desc" => query.OrderByDescending(m => m.DateReleased),
+                _ => query.OrderBy(m => m.Title)
+            };
 
-            // Adicionar URLs completas às imagens
-            if (movies.Count() > 0 )
+            // Executa a query
+            var movies = await query.ToListAsync();
+
+            // Adiciona URLs completas aos posters
+            foreach (var movie in movies)
             {
-                foreach (var movie in movies)
+                if (movie.Images?.Any() == true)
                 {
-                    if (movie.Images != null && movie.Images.Count > 0)
+                    foreach (var image in movie.Images) // Já só tem posters devido ao Include filtrado
                     {
-                        foreach (var image in movie.Images)
+                        if (!string.IsNullOrEmpty(image.imageUrl))
                         {
-                            if (image.imageUrl == null) continue;
                             image.FullUrl = _storageService.GetFullUrl(image.imageUrl);
                         }
                     }
@@ -85,6 +84,7 @@ namespace MovieDataBase.Controllers
             return View(movies);
         }
 
+        
         // GET: Movies/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -264,23 +264,6 @@ namespace MovieDataBase.Controllers
             return View(movieToUpdate);
         }
 
-        // GET: Movies/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var movie = await _context.Movies
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (movie == null)
-            {
-                return NotFound();
-            }
-
-            return View(movie);
-        }
 
         // POST: Movies/Delete/5
         [HttpPost, ActionName("Delete")]

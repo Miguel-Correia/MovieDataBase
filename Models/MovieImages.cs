@@ -12,6 +12,6 @@ namespace MovieDataBase.Models
         public Movies? Movie { get; set; }
         [NotMapped]
         public string? FullUrl { get; set; }
-        
+        public bool? IsMoviePoster { get; set; }
     }
 }
