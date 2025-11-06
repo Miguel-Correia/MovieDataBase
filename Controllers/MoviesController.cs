@@ -28,16 +28,18 @@ namespace MovieDataBase.Controllers
         }
 
         // GET: Movies
-        public async Task<IActionResult> Index(string sortOrder, int[] selectedGenres, string searchString)
+        public async Task<IActionResult> Index(string sortOrder, int[] selectedGenres, int[] selectedRatings, string searchString)
         {
             PopulateGenresCheckboxes(selectedGenres);
+            PopulateRatingCheckboxes(selectedRatings);
+
             ViewData["MovieSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["DateSortParam"] = sortOrder == "date" ? "date_desc" : "date";
             ViewData["CurrentSearch"] = searchString;
 
             // Query base
             var query = _context.Movies
-                .Include(m => m.Images.Where(i => i.IsMoviePoster == true)) // Filtra posters no EF Core 5+
+                .Include(m => m.Images.Where(i => i.IsMoviePoster == true)) 
                 .Include(m => m.MovieGenres)
                     .ThenInclude(mg => mg.Genre)
                 .AsQueryable();
@@ -52,6 +54,12 @@ namespace MovieDataBase.Controllers
             if (selectedGenres.Length > 0)
             {
                 query = query.Where(m => m.MovieGenres != null && m.MovieGenres.Any(mg => selectedGenres.Contains(mg.GenreId)));
+            }
+
+            // Adicionar filtro de ratings
+            if (selectedRatings != null && selectedRatings.Length > 0)
+            {
+                query = query.Where(m => selectedRatings.Contains((int) m.ContentRating));
             }
 
             // Ordenação
@@ -316,14 +324,14 @@ namespace MovieDataBase.Controllers
             if (movie != null && movie.MovieGenres != null)
                 selectedMovieGenres = new HashSet<int>(movie.MovieGenres.Select(g => g.GenreId));
 
-            var viewModel = new List<MovieGenreData>();
+            var viewModel = new List<CheckBoxData>();
 
             foreach (var genre in allGenres)
             {
-                viewModel.Add(new MovieGenreData
+                viewModel.Add(new CheckBoxData
                 {
-                    GenreId = genre.Id,
-                    GenreName = genre.Name != null ? genre.Name : "",
+                    Id = genre.Id,
+                    Name = genre.Name != null ? genre.Name : "",
                     Selected = selectedMovieGenres.Contains(genre.Id)
                 });
             }
@@ -335,20 +343,38 @@ namespace MovieDataBase.Controllers
             var allGenres = _context.Genre;
             var selectedMovieGenres = new HashSet<int>();
 
-            var viewModel = new List<MovieGenreData>();
+            var viewModel = new List<CheckBoxData>();
 
             foreach (var genre in allGenres)
             {
-                viewModel.Add(new MovieGenreData
+                viewModel.Add(new CheckBoxData
                 {
-                    GenreId = genre.Id,
-                    GenreName = genre.Name != null ? genre.Name : "",
+                    Id = genre.Id,
+                    Name = genre.Name != null ? genre.Name : "",
                     Selected = selectedGenres.Contains(genre.Id)
                 });
             }
             ViewBag.Genres = viewModel;
         }
 
+        private void PopulateRatingCheckboxes(int[] selectedRatings)
+        {
+            var allRatings = Enum.GetValues(typeof(ContentRating)).Cast<ContentRating>().ToList();
+            var selectedMovieGenres = new HashSet<int>();
+
+            var viewModel = new List<CheckBoxData>();
+
+            foreach (var rating in allRatings)
+            {
+                viewModel.Add(new CheckBoxData
+                {
+                    Id = (int)rating,
+                    Name = rating.ToString(),
+                    Selected = selectedRatings.Contains((int)rating)
+                });
+            }
+            ViewBag.ContentRatings = viewModel;
+        }
 
         private void UpdateMovieGenres(int[] selectedGenres, Movies movie)
         {
@@ -490,10 +516,10 @@ namespace MovieDataBase.Controllers
         }
     }
 
-    public class MovieGenreData
+    public class CheckBoxData
     {
-        public int GenreId { get; set; }
-        public string? GenreName { get; set; }
+        public int Id { get; set; }
+        public string? Name { get; set; }
         public bool Selected { get; set; }
     }
     

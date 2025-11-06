@@ -57,7 +57,7 @@
                 <tr>
                     @{
                         int cnt = 0;
-                        List<MovieDataBase.Controllers.MovieGenreData> genres = ViewBag.Genres;
+                        List<MovieDataBase.Controllers.CheckBoxData> genres = ViewBag.Genres;
                         foreach (var genre in genres)
                         {
                             if (cnt++ % 3 == 0)
@@ -67,9 +67,9 @@
                             @:<td>
                                 <input type="checkbox"
                                        name="selectedGenres"
-                                       value="@genre.GenreId"
+                                       value="@genre.Id"
                                        @(Html.Raw(genre.Selected ? "checked=\"checked\"" : "")) />
-                                @genre.GenreName
+                                @genre.Name
                             @:</td>
                         }
                         @:</tr>
