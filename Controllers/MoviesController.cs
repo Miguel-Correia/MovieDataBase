@@ -33,8 +33,7 @@ namespace MovieDataBase.Controllers
             PopulateGenresCheckboxes(selectedGenres);
             PopulateRatingCheckboxes(selectedRatings);
 
-            ViewData["MovieSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewData["DateSortParam"] = sortOrder == "date" ? "date_desc" : "date";
+            ViewData["SortParam"] = sortOrder;
             ViewData["CurrentSearch"] = searchString;
 
             // Query base
@@ -58,8 +57,15 @@ namespace MovieDataBase.Controllers
 
             // Adicionar filtro de ratings
             if (selectedRatings != null && selectedRatings.Length > 0)
-            {
-                query = query.Where(m => selectedRatings.Contains((int) m.ContentRating));
+            {   
+                // Converte os ints para o enum
+                var ratingEnums = selectedRatings
+                    .Select(r => (ContentRating)r)
+                    .ToList();
+
+
+                query = query.Where(m => m.ContentRating.HasValue && 
+                             ratingEnums.Contains(m.ContentRating.Value));
             }
 
             // Ordenação

@@ -1,18 +1,133 @@
 ﻿@model IEnumerable<MovieDataBase.Models.Movies>
 
-<a asp-action="Create" class="btn btn-primary mt-4">+ Add New Movie</a>
-<hr class="border-secondary" />
+<!-- Botão para abrir Filtros -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <button class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#filterOffcanvas">
+        <i class="bi bi-funnel-fill me-2"></i>Filters & Sort
+    </button>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-circle me-2"></i>Add New Movie
+    </a>
+</div>
 
+<!-- Offcanvas de Filtros -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="filterOffcanvas" aria-labelledby="filterOffcanvasLabel">
+    <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title" id="filterOffcanvasLabel">
+            <i class="bi bi-sliders me-2"></i>Filters & Sorting
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    
+    <div class="offcanvas-body">
+        <form asp-action="Index" method="get" id="filterForm">
+                        
+            <!-- Ordenação -->
+            <div class="mb-4">
+                <label class="form-label fw-bold">
+                    <i class="bi bi-sort-down me-2"></i>Sort By
+                </label>
+                <select name="sortOrder" class="form-select" onchange="this.form.submit()">
+                    <option value="" selected="@(string.IsNullOrEmpty(ViewData["SortParam"]?.ToString()))">Title (A-Z)</option>
+                    <option value="name_desc" selected="@(ViewData["SortParam"]?.ToString() == "name_desc")">Title (Z-A)</option>
+                    <option value="date" selected="@(ViewData["SortParam"]?.ToString() == "date")">Release Date (Oldest)</option>
+                    <option value="date_desc" selected="@(ViewData["SortParam"]?.ToString() == "date_desc")">Release Date (Newest)</option>
+                </select>
+            </div>
+            
+            <hr class="border-secondary" />
+            
+            <!-- Filtro por Género -->
+            <div class="mb-4">
+                <label class="form-label fw-bold">
+                    <i class="bi bi-tags-fill me-2"></i>Genres
+                </label>
+                <div class="genres-scroll" style="max-height: 250px; overflow-y: auto;">
+                    @if (ViewBag.Genres != null)
+                    {
+                        @foreach (var genre in ViewBag.Genres)
+                        {
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" 
+                                       type="checkbox" 
+                                       name="selectedGenres" 
+                                       value="@genre.Id" 
+                                       id="@genre.Id"
+                                       @(genre.Selected ? "checked" : "")>
+                                <label class="form-check-label" for="@genre.Id">
+                                    @genre.Name
+                                </label>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-muted small">No genres available</p>
+                    }
+                </div>
+            </div>
+            
+            <hr class="border-secondary" />
+            
+            <!-- Filtro por Content Rating -->
+            <div class="mb-4">
+                <label class="form-label fw-bold">
+                    <i class="bi bi-shield-fill-check me-2"></i>Content Rating
+                </label>
+                <div class="ratings-scroll" style="max-height: 200px; overflow-y: auto;">
+                    @if (ViewBag.ContentRatings != null)
+                    {
+                        @foreach (var rating in ViewBag.ContentRatings)
+                        {
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" 
+                                       type="checkbox" 
+                                       name="selectedRatings" 
+                                       value="@rating.Id" 
+                                       id="@rating.Id"
+                                       @(rating.Selected ? "checked" : "")>
+                                <label class="form-check-label" for="@rating.Id">
+                                    @rating.Name
+                                </label>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-muted small">No ratings available</p>
+                    }
+                </div>
+            </div>
+            
+            <hr class="border-secondary" />
+            
+            <!-- Botões de Ação -->
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check-circle me-2"></i>Apply Filters
+                </button>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-x-circle me-2"></i>Clear All
+                </a>
+            </div>
+            
+        </form>
+    </div>
+</div>
+
+<hr class="border-secondary mb-4" />
+
+<!-- Grid de Filmes -->
 <div class="row row-cols-1 row-cols-md-4 g-4">
     @foreach (var movie in Model)
     {
         <div class="col">
             <div class="card h-100 shadow-sm bg-dark border-secondary hover-reveal">
-
-                @if (movie.Images != null && movie.Images.FirstOrDefault()!= null)
+                @if (movie.Images != null && movie.Images.FirstOrDefault() != null)
                 {
                     <img src="@movie.Images.FirstOrDefault()?.FullUrl"
-                                         class="d-block w-100 poster-img" />
+                         class="d-block w-100 poster-img"
+                         alt="@movie.Title" />
                 }
                 else
                 {
@@ -20,7 +135,6 @@
                          class="card-img-top poster-img"
                          alt="@movie.Title" />
                 }
-
                 <div class="card-body reveal-content">
                     <h5 class="card-title">
                         <a asp-action="Details" asp-route-id="@movie.Id" class="text-light" title="@movie.Title">
@@ -29,7 +143,6 @@
                     </h5>
                     <p class="card-text text-secondary director-text">Directed by: @movie.Director</p>
                 </div>
-
                 <div class="card-footer reveal-content d-flex justify-content-between align-items-center bg-transparent border-secondary">
                     <div>
                         @if (movie.DateReleased.HasValue)
@@ -37,7 +150,6 @@
                             <small class="text-muted">Released: @movie.DateReleased.Value.ToString("dd-MM-yyyy")</small>
                         }
                     </div>
-
                     <div>
                         @{
                             var ratingDisplay = MovieDataBase.Models.EnumHelpers.GetDisplayName(movie.ContentRating);
@@ -48,8 +160,48 @@
                         }
                     </div>
                 </div>
-
             </div>
         </div>
     }
 </div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info text-center mt-5">
+        <i class="bi bi-info-circle me-2"></i>
+        No movies found. Try adjusting your filters or add a new movie!
+    </div>
+}
+
+<style>
+    .offcanvas {
+        width: 350px !important;
+    }
+    
+    .form-check-input:checked {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+    }
+    
+    .genres-scroll::-webkit-scrollbar,
+    .ratings-scroll::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    .genres-scroll::-webkit-scrollbar-track,
+    .ratings-scroll::-webkit-scrollbar-track {
+        background: #2b3035;
+        border-radius: 4px;
+    }
+    
+    .genres-scroll::-webkit-scrollbar-thumb,
+    .ratings-scroll::-webkit-scrollbar-thumb {
+        background: #495057;
+        border-radius: 4px;
+    }
+    
+    .genres-scroll::-webkit-scrollbar-thumb:hover,
+    .ratings-scroll::-webkit-scrollbar-thumb:hover {
+        background: #6c757d;
+    }
+</style>
