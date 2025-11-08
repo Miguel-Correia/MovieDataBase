@@ -42,6 +42,7 @@ namespace MovieDataBase.Controllers
                 .Include(p => p.MovieRoles!)
                     .ThenInclude(pr => pr.Movie!)
                         .ThenInclude(m => m.Images)
+                .Include(p => p.Images)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (people == null)
@@ -63,6 +64,15 @@ namespace MovieDataBase.Controllers
                             image.FullUrl = _storageService.GetFullUrl(image.imageUrl);
                         }
                     }
+                }
+            }
+
+            if (people.Images != null)
+            {
+                foreach (var image in people.Images)
+                {
+                    if (image.imageUrl == null) continue;
+                    image.FullUrl = _storageService.GetFullUrl(image.imageUrl);
                 }
             }
 
