@@ -2,12 +2,16 @@
 
 @{
     ViewData["Title"] = Model?.Name ?? "Person";
+    var imageUrl =  Model?.Images?
+                                .Where(p => p.IsPoster.HasValue && p.IsPoster.Value)
+                                .First().FullUrl;
+    var profileUrl =   imageUrl != null ? imageUrl : "/images/no-profile.svg";
 }
 
 
 <div class="mb-4">
     <div class="d-flex align-items-start bg-dark p-4 rounded border border-secondary">
-        <img src="/images/no-profile.svg"
+        <img src="@profileUrl"
              alt="@Model?.Name"
              class="rounded-circle me-4"
              style="width:140px;height:140px;object-fit:cover;border:3px solid #6c757d;" />

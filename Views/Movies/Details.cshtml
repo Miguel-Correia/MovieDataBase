@@ -199,7 +199,9 @@ else
                         @foreach (var pr in castList)
                         {
                             var person = pr.People;
-                            var profileUrl = "/images/no-profile.svg";
+                            
+                            var profileUrl =  person.Images?.FirstOrDefault()?.FullUrl ?? "/images/no-profile.svg";
+
                             <div class="col-12 col-md-6 mb-3">
                                 <div class="d-flex align-items-center p-2 bg-dark rounded border border-secondary">
                                     <img src="@profileUrl"

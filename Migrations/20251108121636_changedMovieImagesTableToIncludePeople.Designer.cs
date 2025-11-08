@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieDataBase.Data;
 
@@ -11,9 +12,11 @@ using MovieDataBase.Data;
 namespace MovieDataBase.Migrations
 {
     [DbContext(typeof(MovieDataBaseContext))]
-    partial class MovieDataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20251108121636_changedMovieImagesTableToIncludePeople")]
+    partial class changedMovieImagesTableToIncludePeople
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -172,8 +175,6 @@ namespace MovieDataBase.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("MovieId");
-
-                    b.HasIndex("PeopleId");
 
                     b.ToTable("MovieImages");
                 });
@@ -1031,7 +1032,7 @@ namespace MovieDataBase.Migrations
 
                     b.HasOne("MovieDataBase.Models.People", "People")
                         .WithMany("Images")
-                        .HasForeignKey("PeopleId");
+                        .HasForeignKey("MovieId");
 
                     b.Navigation("Movie");
 

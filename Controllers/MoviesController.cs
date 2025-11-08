@@ -38,7 +38,7 @@ namespace MovieDataBase.Controllers
 
             // Query base
             var query = _context.Movies
-                .Include(m => m.Images.Where(i => i.IsMoviePoster == true)) 
+                .Include(m => m.Images.Where(i => i.IsPoster == true)) 
                 .Include(m => m.MovieGenres)
                     .ThenInclude(mg => mg.Genre)
                 .AsQueryable();
@@ -113,6 +113,7 @@ namespace MovieDataBase.Controllers
                 .Include(mi => mi.Images)
                 .Include(pm => pm.PeopleRoles!)
                 .ThenInclude(p => p.People)
+                .ThenInclude(pi => pi.Images.Where(i => i.IsPoster == true))
                 .Include(pm => pm.PeopleRoles!)
                 .ThenInclude(r => r.Role)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -129,6 +130,23 @@ namespace MovieDataBase.Controllers
                 {
                     if (image.imageUrl == null) continue;
                     image.FullUrl = _storageService.GetFullUrl(image.imageUrl);
+                }
+            }
+
+
+            if (movie.PeopleRoles != null)
+            {
+                var fullUrl = String.Empty;
+                foreach (var people in movie.PeopleRoles)
+                {
+                    if (people.People.Images != null)
+                    {
+                        foreach( var image in people.People.Images)
+                        {
+                            if (image.imageUrl == null) continue;
+                                image.FullUrl = _storageService.GetFullUrl(image.imageUrl);
+                        }
+                    }
                 }
             }
 

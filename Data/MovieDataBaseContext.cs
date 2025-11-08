@@ -26,6 +26,7 @@ namespace MovieDataBase.Data
             modelBuilder.Entity<MovieGenres>().HasOne(mg => mg.Genre).WithMany(mg => mg.MovieGenres).HasForeignKey(mg => mg.GenreId);
 
             modelBuilder.Entity<MovieImages>().HasOne(mi => mi.Movie).WithMany(m => m.Images).HasForeignKey(mi => mi.MovieId);
+			modelBuilder.Entity<MovieImages>().HasOne(mi => mi.People).WithMany(m => m.Images).HasForeignKey(mi => mi.PeopleId);
 
             modelBuilder.Entity<PeopleRolesInMovies>().HasKey(pr => new
             {

@@ -10,8 +10,11 @@ namespace MovieDataBase.Models
         public int? MovieId { get; set; }
         [ForeignKey("MovieId")]
         public Movies? Movie { get; set; }
+        public int? PeopleId { get; set; }
+        [ForeignKey("MovieId")]
+        public People? People { get; set; }
         [NotMapped]
         public string? FullUrl { get; set; }
-        public bool? IsMoviePoster { get; set; }
+        public bool? IsPoster { get; set; }
     }
 }

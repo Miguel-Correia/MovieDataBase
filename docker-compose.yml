@@ -44,6 +44,9 @@ services:
       /usr/bin/mc mb myminio/movie-images --ignore-existing;
       /usr/bin/mc anonymous set download myminio/movie-images;
       echo 'Bucket movie-images configurado como público!';
+      /usr/bin/mc mb myminio/people-images --ignore-existing;
+      /usr/bin/mc anonymous set download myminio/people-images;
+      echo 'Bucket people-images configurado como público!';
       exit 0;
       "
 
