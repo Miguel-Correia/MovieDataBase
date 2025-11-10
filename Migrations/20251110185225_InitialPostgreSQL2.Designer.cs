@@ -2,18 +2,18 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieDataBase.Data;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace MovieDataBase.Migrations
 {
     [DbContext(typeof(MovieDataBaseContext))]
-    [Migration("20251108121636_changedMovieImagesTableToIncludePeople")]
-    partial class changedMovieImagesTableToIncludePeople
+    [Migration("20251110185225_InitialPostgreSQL2")]
+    partial class InitialPostgreSQL2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,27 +21,31 @@ namespace MovieDataBase.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "9.0.9")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("MovieDataBase.Models.Genre", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text")
+                        .HasColumnName("description");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_genre");
 
-                    b.ToTable("Genre");
+                    b.ToTable("genre", (string)null);
 
                     b.HasData(
                         new
@@ -73,16 +77,20 @@ namespace MovieDataBase.Migrations
             modelBuilder.Entity("MovieDataBase.Models.MovieGenres", b =>
                 {
                     b.Property<int>("MovieId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer")
+                        .HasColumnName("movie_id");
 
                     b.Property<int>("GenreId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer")
+                        .HasColumnName("genre_id");
 
-                    b.HasKey("MovieId", "GenreId");
+                    b.HasKey("MovieId", "GenreId")
+                        .HasName("pk_movie_genres");
 
-                    b.HasIndex("GenreId");
+                    b.HasIndex("GenreId")
+                        .HasDatabaseName("ix_movie_genres_genre_id");
 
-                    b.ToTable("MovieGenres");
+                    b.ToTable("movie_genres", (string)null);
 
                     b.HasData(
                         new
@@ -156,61 +164,80 @@ namespace MovieDataBase.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<bool?>("IsPoster")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_poster");
 
                     b.Property<int?>("MovieId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer")
+                        .HasColumnName("movie_id");
 
                     b.Property<int?>("PeopleId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer")
+                        .HasColumnName("people_id");
 
                     b.Property<string>("imageUrl")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text")
+                        .HasColumnName("image_url");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_movie_images");
 
-                    b.HasIndex("MovieId");
+                    b.HasIndex("MovieId")
+                        .HasDatabaseName("ix_movie_images_movie_id");
 
-                    b.ToTable("MovieImages");
+                    b.HasIndex("PeopleId")
+                        .HasDatabaseName("ix_movie_images_people_id");
+
+                    b.ToTable("movie_images", (string)null);
                 });
 
             modelBuilder.Entity("MovieDataBase.Models.Movies", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ContentRating")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text")
+                        .HasColumnName("content_rating");
 
                     b.Property<int?>("CritiqueScore")
-                        .HasColumnType("int");
+                        .HasColumnType("integer")
+                        .HasColumnName("critique_score");
 
                     b.Property<DateOnly?>("DateReleased")
-                        .HasColumnType("date");
+                        .HasColumnType("date")
+                        .HasColumnName("date_released");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text")
+                        .HasColumnName("description");
 
                     b.Property<string>("Director")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text")
+                        .HasColumnName("director");
 
                     b.Property<int?>("Runtime")
-                        .HasColumnType("int");
+                        .HasColumnType("integer")
+                        .HasColumnName("runtime");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text")
+                        .HasColumnName("title");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_movies");
 
-                    b.ToTable("Movies");
+                    b.ToTable("movies", (string)null);
 
                     b.HasData(
                         new
@@ -307,308 +334,314 @@ namespace MovieDataBase.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Biography")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text")
+                        .HasColumnName("biography");
 
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("DateOfBirth")
+                        .HasColumnType("date")
+                        .HasColumnName("date_of_birth");
 
-                    b.Property<DateTime?>("DateOfDeath")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly?>("DateOfDeath")
+                        .HasColumnType("date")
+                        .HasColumnName("date_of_death");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_people");
 
-                    b.ToTable("People");
+                    b.ToTable("people", (string)null);
 
                     b.HasData(
                         new
                         {
                             Id = 1,
                             Biography = "British-American filmmaker known for his cerebral, often nonlinear storytelling. Notable works include The Dark Knight trilogy, Inception, and Interstellar.",
-                            DateOfBirth = new DateTime(1970, 7, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1970, 7, 30),
                             Name = "Christopher Nolan"
                         },
                         new
                         {
                             Id = 2,
                             Biography = "American film director and screenwriter best known for his adaptations of Stephen King novels, including The Shawshank Redemption and The Green Mile.",
-                            DateOfBirth = new DateTime(1959, 1, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1959, 1, 28),
                             Name = "Frank Darabont"
                         },
                         new
                         {
                             Id = 3,
                             Biography = "American filmmaker known for comedy films such as Superbad and Adventureland.",
-                            DateOfBirth = new DateTime(1964, 7, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1964, 7, 11),
                             Name = "Greg Mottola"
                         },
                         new
                         {
                             Id = 4,
                             Biography = "American filmmaker known for Forrest Gump, Back to the Future trilogy, and pioneering motion-capture animation.",
-                            DateOfBirth = new DateTime(1951, 5, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1951, 5, 14),
                             Name = "Robert Zemeckis"
                         },
                         new
                         {
                             Id = 5,
                             Biography = "Australian filmmaker best known for creating the Mad Max franchise and directing Happy Feet.",
-                            DateOfBirth = new DateTime(1945, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1945, 3, 3),
                             Name = "George Miller"
                         },
                         new
                         {
                             Id = 6,
                             Biography = "South Korean filmmaker known for Parasite (winner of 4 Oscars including Best Picture), Snowpiercer, and Memories of Murder.",
-                            DateOfBirth = new DateTime(1969, 9, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1969, 9, 14),
                             Name = "Bong Joon-ho"
                         },
                         new
                         {
                             Id = 7,
                             Biography = "British actor known for his versatility and intense method acting. Famous for Batman trilogy, American Psycho, and The Machinist.",
-                            DateOfBirth = new DateTime(1974, 1, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1974, 1, 30),
                             Name = "Christian Bale"
                         },
                         new
                         {
                             Id = 8,
                             Biography = "Australian actor who won a posthumous Oscar for his iconic portrayal of the Joker in The Dark Knight.",
-                            DateOfBirth = new DateTime(1979, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DateOfDeath = new DateTime(2008, 1, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1979, 4, 4),
+                            DateOfDeath = new DateOnly(2008, 1, 22),
                             Name = "Heath Ledger"
                         },
                         new
                         {
                             Id = 9,
                             Biography = "Legendary American actor and narrator with a distinctive voice. Academy Award winner known for roles in Shawshank Redemption and Million Dollar Baby.",
-                            DateOfBirth = new DateTime(1937, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1937, 6, 1),
                             Name = "Morgan Freeman"
                         },
                         new
                         {
                             Id = 10,
                             Biography = "American actor, screenwriter, and director known for The Shawshank Redemption and Mystic River.",
-                            DateOfBirth = new DateTime(1958, 10, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1958, 10, 16),
                             Name = "Tim Robbins"
                         },
                         new
                         {
                             Id = 11,
                             Biography = "American actor, comedian, and filmmaker. Two-time Oscar nominee known for Superbad, Moneyball, and The Wolf of Wall Street.",
-                            DateOfBirth = new DateTime(1983, 12, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1983, 12, 20),
                             Name = "Jonah Hill"
                         },
                         new
                         {
                             Id = 12,
                             Biography = "Canadian actor known for his awkward, comedic roles in Superbad, Juno, and Scott Pilgrim vs. the World.",
-                            DateOfBirth = new DateTime(1988, 6, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1988, 6, 7),
                             Name = "Michael Cera"
                         },
                         new
                         {
                             Id = 13,
                             Biography = "Oscar-winning American actor and environmental activist. Known for Titanic, Inception, The Revenant, and collaborations with Scorsese.",
-                            DateOfBirth = new DateTime(1974, 11, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1974, 11, 11),
                             Name = "Leonardo DiCaprio"
                         },
                         new
                         {
                             Id = 14,
                             Biography = "British actor known for intense physical transformations. Famous for Mad Max: Fury Road, The Dark Knight Rises, and Venom.",
-                            DateOfBirth = new DateTime(1977, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1977, 9, 15),
                             Name = "Tom Hardy"
                         },
                         new
                         {
                             Id = 15,
                             Biography = "Canadian actor known for Juno, Inception, and The Umbrella Academy. Now known as Elliot Page.",
-                            DateOfBirth = new DateTime(1987, 2, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1987, 2, 21),
                             Name = "Ellen Page"
                         },
                         new
                         {
                             Id = 16,
                             Biography = "Two-time Oscar winner and one of Hollywood's most beloved actors. Known for Forrest Gump, Saving Private Ryan, and Cast Away.",
-                            DateOfBirth = new DateTime(1956, 7, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1956, 7, 9),
                             Name = "Tom Hanks"
                         },
                         new
                         {
                             Id = 17,
                             Biography = "South African-American actress and producer. Oscar winner known for Monster, Mad Max: Fury Road, and Atomic Blonde.",
-                            DateOfBirth = new DateTime(1975, 8, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1975, 8, 7),
                             Name = "Charlize Theron"
                         },
                         new
                         {
                             Id = 18,
                             Biography = "Oscar-winning American actor known for Dallas Buyers Club, Interstellar, and True Detective.",
-                            DateOfBirth = new DateTime(1969, 11, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1969, 11, 4),
                             Name = "Matthew McConaughey"
                         },
                         new
                         {
                             Id = 19,
                             Biography = "Oscar-winning American actress known for The Devil Wears Prada, Les Misérables, and Interstellar.",
-                            DateOfBirth = new DateTime(1982, 11, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1982, 11, 12),
                             Name = "Anne Hathaway"
                         },
                         new
                         {
                             Id = 20,
                             Biography = "South Korean actor and Bong Joon-ho's frequent collaborator. Known for Parasite, Memories of Murder, and The Host.",
-                            DateOfBirth = new DateTime(1967, 1, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1967, 1, 17),
                             Name = "Song Kang-ho"
                         },
                         new
                         {
                             Id = 21,
                             Biography = "British-American screenwriter and producer, brother of Christopher Nolan. Co-wrote The Dark Knight trilogy, Interstellar, and created Westworld.",
-                            DateOfBirth = new DateTime(1976, 6, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1976, 6, 6),
                             Name = "Jonathan Nolan"
                         },
                         new
                         {
                             Id = 22,
                             Biography = "American screenwriter, film director and comic book writer. Known for writing Blade trilogy and The Dark Knight trilogy.",
-                            DateOfBirth = new DateTime(1965, 12, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1965, 12, 22),
                             Name = "David Goyer"
                         },
                         new
                         {
                             Id = 23,
                             Biography = "American author known as the 'King of Horror'. Wrote the novella 'Rita Hayworth and Shawshank Redemption' which inspired the film.",
-                            DateOfBirth = new DateTime(1947, 9, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1947, 9, 21),
                             Name = "Stephen King"
                         },
                         new
                         {
                             Id = 24,
                             Biography = "Canadian-American actor, comedian, and writer. Co-wrote Superbad with Evan Goldberg based on their teenage experiences.",
-                            DateOfBirth = new DateTime(1982, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1982, 4, 15),
                             Name = "Seth Rogen"
                         },
                         new
                         {
                             Id = 25,
                             Biography = "Canadian screenwriter and producer. Frequent collaborator with Seth Rogen on films like Superbad and Pineapple Express.",
-                            DateOfBirth = new DateTime(1982, 9, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1982, 9, 11),
                             Name = "Evan Goldberg"
                         },
                         new
                         {
                             Id = 26,
                             Biography = "American screenwriter. Academy Award winner for Forrest Gump. Also wrote Munich, The Curious Case of Benjamin Button, and Dune.",
-                            DateOfBirth = new DateTime(1945, 3, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1945, 3, 22),
                             Name = "Eric Roth"
                         },
                         new
                         {
                             Id = 27,
                             Biography = "American novelist and non-fiction writer. Wrote the novel 'Forrest Gump' which was adapted into the Oscar-winning film.",
-                            DateOfBirth = new DateTime(1943, 3, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DateOfDeath = new DateTime(2020, 9, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1943, 3, 23),
+                            DateOfDeath = new DateOnly(2020, 9, 17),
                             Name = "Winston Groom"
                         },
                         new
                         {
                             Id = 28,
                             Biography = "British artist and designer. Co-wrote Mad Max: Fury Road and designed much of its distinctive visual style.",
-                            DateOfBirth = new DateTime(1957, 3, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1957, 3, 28),
                             Name = "Brendan McCarthy"
                         },
                         new
                         {
                             Id = 29,
                             Biography = "South Korean screenwriter. Co-wrote Parasite with Bong Joon-ho, winning the Academy Award for Best Original Screenplay.",
-                            DateOfBirth = new DateTime(1989, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1989, 1, 1),
                             Name = "Han Jin-won"
                         },
                         new
                         {
                             Id = 30,
                             Biography = "British film producer and wife of Christopher Nolan. Produced all of Nolan's films including The Dark Knight trilogy, Inception, and Interstellar.",
-                            DateOfBirth = new DateTime(1971, 12, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1971, 12, 9),
                             Name = "Emma Thomas"
                         },
                         new
                         {
                             Id = 31,
                             Biography = "American film producer. Produced The Dark Knight trilogy, Man of Steel, and numerous other blockbusters.",
-                            DateOfBirth = new DateTime(1949, 8, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1949, 8, 2),
                             Name = "Charles Roven"
                         },
                         new
                         {
                             Id = 32,
                             Biography = "American film producer. Worked on The Shawshank Redemption and The Majestic with Frank Darabont.",
-                            DateOfBirth = new DateTime(1952, 6, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1952, 6, 8),
                             Name = "Niki Marvin"
                         },
                         new
                         {
                             Id = 33,
                             Biography = "American producer, director, and comedian. Produced Superbad and numerous other comedy hits like Knocked Up and The 40-Year-Old Virgin.",
-                            DateOfBirth = new DateTime(1967, 12, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1967, 12, 6),
                             Name = "Judd Apatow"
                         },
                         new
                         {
                             Id = 34,
                             Biography = "American film producer. Produced Superbad and other Judd Apatow productions.",
-                            DateOfBirth = new DateTime(1968, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1968, 5, 15),
                             Name = "Shaun McKittrick"
                         },
                         new
                         {
                             Id = 35,
                             Biography = "American film producer. Won Academy Award for producing Forrest Gump. Also produced The Devil Wears Prada.",
-                            DateOfBirth = new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1960, 1, 1),
                             Name = "Wendy Finerman"
                         },
                         new
                         {
                             Id = 36,
                             Biography = "American film producer and businessman. Co-produced Forrest Gump. Also co-owner of the New York Giants NFL team.",
-                            DateOfBirth = new DateTime(1949, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1949, 2, 14),
                             Name = "Steve Tisch"
                         },
                         new
                         {
                             Id = 37,
                             Biography = "Australian film producer. Long-time collaborator with George Miller on Mad Max films and Babe.",
-                            DateOfBirth = new DateTime(1952, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1952, 10, 15),
                             Name = "Doug Mitchell"
                         },
                         new
                         {
                             Id = 38,
                             Biography = "American film producer. Produced Interstellar, Contact, and Sleepless in Seattle.",
-                            DateOfBirth = new DateTime(1950, 4, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1950, 4, 14),
                             Name = "Lynda Obst"
                         },
                         new
                         {
                             Id = 39,
                             Biography = "South Korean film producer. Produced Parasite and The Handmaiden. President of Barunson E&A.",
-                            DateOfBirth = new DateTime(1968, 3, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1968, 3, 12),
                             Name = "Kwak Sin-ae"
                         },
                         new
                         {
                             Id = 40,
                             Biography = "South Korean film producer. Co-produced Parasite with Kwak Sin-ae.",
-                            DateOfBirth = new DateTime(1975, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateOnly(1975, 5, 20),
                             Name = "Jang Young-hwan"
                         });
                 });
@@ -616,24 +649,31 @@ namespace MovieDataBase.Migrations
             modelBuilder.Entity("MovieDataBase.Models.PeopleRolesInMovies", b =>
                 {
                     b.Property<int>("MovieId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer")
+                        .HasColumnName("movie_id");
 
                     b.Property<int>("PeopleId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer")
+                        .HasColumnName("people_id");
 
                     b.Property<int>("RoleId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer")
+                        .HasColumnName("role_id");
 
                     b.Property<string>("CharacterName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text")
+                        .HasColumnName("character_name");
 
-                    b.HasKey("MovieId", "PeopleId", "RoleId");
+                    b.HasKey("MovieId", "PeopleId", "RoleId")
+                        .HasName("pk_people_roles_in_movies");
 
-                    b.HasIndex("PeopleId");
+                    b.HasIndex("PeopleId")
+                        .HasDatabaseName("ix_people_roles_in_movies_people_id");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex("RoleId")
+                        .HasDatabaseName("ix_people_roles_in_movies_role_id");
 
-                    b.ToTable("PeopleRolesInMovies");
+                    b.ToTable("people_roles_in_movies", (string)null);
 
                     b.HasData(
                         new
@@ -970,17 +1010,20 @@ namespace MovieDataBase.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_role");
 
-                    b.ToTable("Role");
+                    b.ToTable("role", (string)null);
 
                     b.HasData(
                         new
@@ -1011,13 +1054,15 @@ namespace MovieDataBase.Migrations
                         .WithMany("MovieGenres")
                         .HasForeignKey("GenreId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_movie_genres_genre_genre_id");
 
                     b.HasOne("MovieDataBase.Models.Movies", "Movie")
                         .WithMany("MovieGenres")
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_movie_genres_movies_movie_id");
 
                     b.Navigation("Genre");
 
@@ -1028,11 +1073,13 @@ namespace MovieDataBase.Migrations
                 {
                     b.HasOne("MovieDataBase.Models.Movies", "Movie")
                         .WithMany("Images")
-                        .HasForeignKey("MovieId");
+                        .HasForeignKey("MovieId")
+                        .HasConstraintName("fk_movie_images_movies_movie_id");
 
                     b.HasOne("MovieDataBase.Models.People", "People")
                         .WithMany("Images")
-                        .HasForeignKey("MovieId");
+                        .HasForeignKey("PeopleId")
+                        .HasConstraintName("fk_movie_images_people_people_id");
 
                     b.Navigation("Movie");
 
@@ -1045,19 +1092,22 @@ namespace MovieDataBase.Migrations
                         .WithMany("PeopleRoles")
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_people_roles_in_movies_movies_movie_id");
 
                     b.HasOne("MovieDataBase.Models.People", "People")
                         .WithMany("MovieRoles")
                         .HasForeignKey("PeopleId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_people_roles_in_movies_people_people_id");
 
                     b.HasOne("MovieDataBase.Models.Role", "Role")
                         .WithMany("PeopleInMovies")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_people_roles_in_movies_role_role_id");
 
                     b.Navigation("Movie");
 

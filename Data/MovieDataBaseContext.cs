@@ -178,42 +178,42 @@ namespace MovieDataBase.Data
 				{
 					Id = 1,
 					Name = "Christopher Nolan",
-					DateOfBirth = new DateTime(1970, 7, 30),
+					DateOfBirth = new DateOnly(1970, 7, 30),
 					Biography = "British-American filmmaker known for his cerebral, often nonlinear storytelling. Notable works include The Dark Knight trilogy, Inception, and Interstellar."
 				},
 				new People
 				{
 					Id = 2,
 					Name = "Frank Darabont",
-					DateOfBirth = new DateTime(1959, 1, 28),
+					DateOfBirth = new DateOnly(1959, 1, 28),
 					Biography = "American film director and screenwriter best known for his adaptations of Stephen King novels, including The Shawshank Redemption and The Green Mile."
 				},
 				new People
 				{
 					Id = 3,
 					Name = "Greg Mottola",
-					DateOfBirth = new DateTime(1964, 7, 11),
+					DateOfBirth = new DateOnly(1964, 7, 11),
 					Biography = "American filmmaker known for comedy films such as Superbad and Adventureland."
 				},
 				new People
 				{
 					Id = 4,
 					Name = "Robert Zemeckis",
-					DateOfBirth = new DateTime(1951, 5, 14),
+					DateOfBirth = new DateOnly(1951, 5, 14),
 					Biography = "American filmmaker known for Forrest Gump, Back to the Future trilogy, and pioneering motion-capture animation."
 				},
 				new People
 				{
 					Id = 5,
 					Name = "George Miller",
-					DateOfBirth = new DateTime(1945, 3, 3),
+					DateOfBirth = new DateOnly(1945, 3, 3),
 					Biography = "Australian filmmaker best known for creating the Mad Max franchise and directing Happy Feet."
 				},
 				new People
 				{
 					Id = 6,
 					Name = "Bong Joon-ho",
-					DateOfBirth = new DateTime(1969, 9, 14),
+					DateOfBirth = new DateOnly(1969, 9, 14),
 					Biography = "South Korean filmmaker known for Parasite (winner of 4 Oscars including Best Picture), Snowpiercer, and Memories of Murder."
 				},
 
@@ -222,22 +222,22 @@ namespace MovieDataBase.Data
 				{
 					Id = 7,
 					Name = "Christian Bale",
-					DateOfBirth = new DateTime(1974, 1, 30),
+					DateOfBirth = new DateOnly(1974, 1, 30),
 					Biography = "British actor known for his versatility and intense method acting. Famous for Batman trilogy, American Psycho, and The Machinist."
 				},
 				new People
 				{
 					Id = 8,
 					Name = "Heath Ledger",
-					DateOfBirth = new DateTime(1979, 4, 4),
-					DateOfDeath = new DateTime(2008, 1, 22),
+					DateOfBirth = new DateOnly(1979, 4, 4),
+					DateOfDeath = new DateOnly(2008, 1, 22),
 					Biography = "Australian actor who won a posthumous Oscar for his iconic portrayal of the Joker in The Dark Knight."
 				},
 				new People
 				{
 					Id = 9,
 					Name = "Morgan Freeman",
-					DateOfBirth = new DateTime(1937, 6, 1),
+					DateOfBirth = new DateOnly(1937, 6, 1),
 					Biography = "Legendary American actor and narrator with a distinctive voice. Academy Award winner known for roles in Shawshank Redemption and Million Dollar Baby."
 				},
 
@@ -246,7 +246,7 @@ namespace MovieDataBase.Data
 				{
 					Id = 10,
 					Name = "Tim Robbins",
-					DateOfBirth = new DateTime(1958, 10, 16),
+					DateOfBirth = new DateOnly(1958, 10, 16),
 					Biography = "American actor, screenwriter, and director known for The Shawshank Redemption and Mystic River."
 				},
 
@@ -255,14 +255,14 @@ namespace MovieDataBase.Data
 				{
 					Id = 11,
 					Name = "Jonah Hill",
-					DateOfBirth = new DateTime(1983, 12, 20),
+					DateOfBirth = new DateOnly(1983, 12, 20),
 					Biography = "American actor, comedian, and filmmaker. Two-time Oscar nominee known for Superbad, Moneyball, and The Wolf of Wall Street."
 				},
 				new People
 				{
 					Id = 12,
 					Name = "Michael Cera",
-					DateOfBirth = new DateTime(1988, 6, 7),
+					DateOfBirth = new DateOnly(1988, 6, 7),
 					Biography = "Canadian actor known for his awkward, comedic roles in Superbad, Juno, and Scott Pilgrim vs. the World."
 				},
 
@@ -271,21 +271,21 @@ namespace MovieDataBase.Data
 				{
 					Id = 13,
 					Name = "Leonardo DiCaprio",
-					DateOfBirth = new DateTime(1974, 11, 11),
+					DateOfBirth = new DateOnly(1974, 11, 11),
 					Biography = "Oscar-winning American actor and environmental activist. Known for Titanic, Inception, The Revenant, and collaborations with Scorsese."
 				},
 				new People
 				{
 					Id = 14,
 					Name = "Tom Hardy",
-					DateOfBirth = new DateTime(1977, 9, 15),
+					DateOfBirth = new DateOnly(1977, 9, 15),
 					Biography = "British actor known for intense physical transformations. Famous for Mad Max: Fury Road, The Dark Knight Rises, and Venom."
 				},
 				new People
 				{
 					Id = 15,
 					Name = "Ellen Page",
-					DateOfBirth = new DateTime(1987, 2, 21),
+					DateOfBirth = new DateOnly(1987, 2, 21),
 					Biography = "Canadian actor known for Juno, Inception, and The Umbrella Academy. Now known as Elliot Page."
 				},
 
@@ -294,7 +294,7 @@ namespace MovieDataBase.Data
 				{
 					Id = 16,
 					Name = "Tom Hanks",
-					DateOfBirth = new DateTime(1956, 7, 9),
+					DateOfBirth = new DateOnly(1956, 7, 9),
 					Biography = "Two-time Oscar winner and one of Hollywood's most beloved actors. Known for Forrest Gump, Saving Private Ryan, and Cast Away."
 				},
 
@@ -303,7 +303,7 @@ namespace MovieDataBase.Data
 				{
 					Id = 17,
 					Name = "Charlize Theron",
-					DateOfBirth = new DateTime(1975, 8, 7),
+					DateOfBirth = new DateOnly(1975, 8, 7),
 					Biography = "South African-American actress and producer. Oscar winner known for Monster, Mad Max: Fury Road, and Atomic Blonde."
 				},
 
@@ -312,14 +312,14 @@ namespace MovieDataBase.Data
 				{
 					Id = 18,
 					Name = "Matthew McConaughey",
-					DateOfBirth = new DateTime(1969, 11, 4),
+					DateOfBirth = new DateOnly(1969, 11, 4),
 					Biography = "Oscar-winning American actor known for Dallas Buyers Club, Interstellar, and True Detective."
 				},
 				new People
 				{
 					Id = 19,
 					Name = "Anne Hathaway",
-					DateOfBirth = new DateTime(1982, 11, 12),
+					DateOfBirth = new DateOnly(1982, 11, 12),
 					Biography = "Oscar-winning American actress known for The Devil Wears Prada, Les Misérables, and Interstellar."
 				},
 
@@ -328,7 +328,7 @@ namespace MovieDataBase.Data
 				{
 					Id = 20,
 					Name = "Song Kang-ho",
-					DateOfBirth = new DateTime(1967, 1, 17),
+					DateOfBirth = new DateOnly(1967, 1, 17),
 					Biography = "South Korean actor and Bong Joon-ho's frequent collaborator. Known for Parasite, Memories of Murder, and The Host."
 				}
 			);
@@ -392,64 +392,64 @@ namespace MovieDataBase.Data
 			    { 
 			        Id = 21, 
 			        Name = "Jonathan Nolan", 
-			        DateOfBirth = new DateTime(1976, 6, 6),
+			        DateOfBirth = new DateOnly(1976, 6, 6),
 			        Biography = "British-American screenwriter and producer, brother of Christopher Nolan. Co-wrote The Dark Knight trilogy, Interstellar, and created Westworld."
 			    },
 			    new People 
 			    { 
 			        Id = 22, 
 			        Name = "David Goyer", 
-			        DateOfBirth = new DateTime(1965, 12, 22),
+			        DateOfBirth = new DateOnly(1965, 12, 22),
 			        Biography = "American screenwriter, film director and comic book writer. Known for writing Blade trilogy and The Dark Knight trilogy."
 			    },
 			    new People 
 			    { 
 			        Id = 23, 
 			        Name = "Stephen King", 
-			        DateOfBirth = new DateTime(1947, 9, 21),
+			        DateOfBirth = new DateOnly(1947, 9, 21),
 			        Biography = "American author known as the 'King of Horror'. Wrote the novella 'Rita Hayworth and Shawshank Redemption' which inspired the film."
 			    },
 			    new People 
 			    { 
 			        Id = 24, 
 			        Name = "Seth Rogen", 
-			        DateOfBirth = new DateTime(1982, 4, 15),
+			        DateOfBirth = new DateOnly(1982, 4, 15),
 			        Biography = "Canadian-American actor, comedian, and writer. Co-wrote Superbad with Evan Goldberg based on their teenage experiences."
 			    },
 			    new People 
 			    { 
 			        Id = 25, 
 			        Name = "Evan Goldberg", 
-			        DateOfBirth = new DateTime(1982, 9, 11),
+			        DateOfBirth = new DateOnly(1982, 9, 11),
 			        Biography = "Canadian screenwriter and producer. Frequent collaborator with Seth Rogen on films like Superbad and Pineapple Express."
 			    },
 			    new People 
 			    { 
 			        Id = 26, 
 			        Name = "Eric Roth", 
-			        DateOfBirth = new DateTime(1945, 3, 22),
+			        DateOfBirth = new DateOnly(1945, 3, 22),
 			        Biography = "American screenwriter. Academy Award winner for Forrest Gump. Also wrote Munich, The Curious Case of Benjamin Button, and Dune."
 			    },
 			    new People 
 			    { 
 			        Id = 27, 
 			        Name = "Winston Groom", 
-			        DateOfBirth = new DateTime(1943, 3, 23),
-			        DateOfDeath = new DateTime(2020, 9, 17),
+			        DateOfBirth = new DateOnly(1943, 3, 23),
+			        DateOfDeath = new DateOnly(2020, 9, 17),
 			        Biography = "American novelist and non-fiction writer. Wrote the novel 'Forrest Gump' which was adapted into the Oscar-winning film."
 			    },
 			    new People 
 			    { 
 			        Id = 28, 
 			        Name = "Brendan McCarthy", 
-			        DateOfBirth = new DateTime(1957, 3, 28),
+			        DateOfBirth = new DateOnly(1957, 3, 28),
 			        Biography = "British artist and designer. Co-wrote Mad Max: Fury Road and designed much of its distinctive visual style."
 			    },
 			    new People 
 			    { 
 			        Id = 29, 
 			        Name = "Han Jin-won", 
-			        DateOfBirth = new DateTime(1989, 1, 1),
+			        DateOfBirth = new DateOnly(1989, 1, 1),
 			        Biography = "South Korean screenwriter. Co-wrote Parasite with Bong Joon-ho, winning the Academy Award for Best Original Screenplay."
 			    },
 
@@ -458,77 +458,77 @@ namespace MovieDataBase.Data
 			    { 
 			        Id = 30, 
 			        Name = "Emma Thomas", 
-			        DateOfBirth = new DateTime(1971, 12, 9),
+			        DateOfBirth = new DateOnly(1971, 12, 9),
 			        Biography = "British film producer and wife of Christopher Nolan. Produced all of Nolan's films including The Dark Knight trilogy, Inception, and Interstellar."
 			    },
 			    new People 
 			    { 
 			        Id = 31, 
 			        Name = "Charles Roven", 
-			        DateOfBirth = new DateTime(1949, 8, 2),
+			        DateOfBirth = new DateOnly(1949, 8, 2),
 			        Biography = "American film producer. Produced The Dark Knight trilogy, Man of Steel, and numerous other blockbusters."
 			    },
 			    new People 
 			    { 
 			        Id = 32, 
 			        Name = "Niki Marvin", 
-			        DateOfBirth = new DateTime(1952, 6, 8),
+			        DateOfBirth = new DateOnly(1952, 6, 8),
 			        Biography = "American film producer. Worked on The Shawshank Redemption and The Majestic with Frank Darabont."
 			    },
 			    new People 
 			    { 
 			        Id = 33, 
 			        Name = "Judd Apatow", 
-			        DateOfBirth = new DateTime(1967, 12, 6),
+			        DateOfBirth = new DateOnly(1967, 12, 6),
 			        Biography = "American producer, director, and comedian. Produced Superbad and numerous other comedy hits like Knocked Up and The 40-Year-Old Virgin."
 			    },
 			    new People 
 			    { 
 			        Id = 34, 
 			        Name = "Shaun McKittrick", 
-			        DateOfBirth = new DateTime(1968, 5, 15),
+			        DateOfBirth = new DateOnly(1968, 5, 15),
 			        Biography = "American film producer. Produced Superbad and other Judd Apatow productions."
 			    },
 			    new People 
 			    { 
 			        Id = 35, 
 			        Name = "Wendy Finerman", 
-			        DateOfBirth = new DateTime(1960, 1, 1),
+			        DateOfBirth = new DateOnly(1960, 1, 1),
 			        Biography = "American film producer. Won Academy Award for producing Forrest Gump. Also produced The Devil Wears Prada."
 			    },
 			    new People 
 			    { 
 			        Id = 36, 
 			        Name = "Steve Tisch", 
-			        DateOfBirth = new DateTime(1949, 2, 14),
+			        DateOfBirth = new DateOnly(1949, 2, 14),
 			        Biography = "American film producer and businessman. Co-produced Forrest Gump. Also co-owner of the New York Giants NFL team."
 			    },
 			    new People 
 			    { 
 			        Id = 37, 
 			        Name = "Doug Mitchell", 
-			        DateOfBirth = new DateTime(1952, 10, 15),
+			        DateOfBirth = new DateOnly(1952, 10, 15),
 			        Biography = "Australian film producer. Long-time collaborator with George Miller on Mad Max films and Babe."
 			    },
 			    new People 
 			    { 
 			        Id = 38, 
 			        Name = "Lynda Obst", 
-			        DateOfBirth = new DateTime(1950, 4, 14),
+			        DateOfBirth = new DateOnly(1950, 4, 14),
 			        Biography = "American film producer. Produced Interstellar, Contact, and Sleepless in Seattle."
 			    },
 			    new People 
 			    { 
 			        Id = 39, 
 			        Name = "Kwak Sin-ae", 
-			        DateOfBirth = new DateTime(1968, 3, 12),
+			        DateOfBirth = new DateOnly(1968, 3, 12),
 			        Biography = "South Korean film producer. Produced Parasite and The Handmaiden. President of Barunson E&A."
 			    },
 			    new People 
 			    { 
 			        Id = 40, 
 			        Name = "Jang Young-hwan", 
-			        DateOfBirth = new DateTime(1975, 5, 20),
+			        DateOfBirth = new DateOnly(1975, 5, 20),
 			        Biography = "South Korean film producer. Co-produced Parasite with Kwak Sin-ae."
 			    }
 			);

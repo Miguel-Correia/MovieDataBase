@@ -2,18 +2,18 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieDataBase.Data;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace MovieDataBase.Migrations
 {
     [DbContext(typeof(MovieDataBaseContext))]
-    [Migration("20251108122632_fixedFRMovieImages")]
-    partial class fixedFRMovieImages
+    [Migration("20251110183533_InitialPostgreSQL")]
+    partial class InitialPostgreSQL
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,27 +21,31 @@ namespace MovieDataBase.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "9.0.9")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("MovieDataBase.Models.Genre", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text")
+                        .HasColumnName("description");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_genre");
 
-                    b.ToTable("Genre");
+                    b.ToTable("genre", (string)null);
 
                     b.HasData(
                         new
@@ -73,16 +77,20 @@ namespace MovieDataBase.Migrations
             modelBuilder.Entity("MovieDataBase.Models.MovieGenres", b =>
                 {
                     b.Property<int>("MovieId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer")
+                        .HasColumnName("movie_id");
 
                     b.Property<int>("GenreId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer")
+                        .HasColumnName("genre_id");
 
-                    b.HasKey("MovieId", "GenreId");
+                    b.HasKey("MovieId", "GenreId")
+                        .HasName("pk_movie_genres");
 
-                    b.HasIndex("GenreId");
+                    b.HasIndex("GenreId")
+                        .HasDatabaseName("ix_movie_genres_genre_id");
 
-                    b.ToTable("MovieGenres");
+                    b.ToTable("movie_genres", (string)null);
 
                     b.HasData(
                         new
@@ -156,63 +164,80 @@ namespace MovieDataBase.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<bool?>("IsPoster")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_poster");
 
                     b.Property<int?>("MovieId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer")
+                        .HasColumnName("movie_id");
 
                     b.Property<int?>("PeopleId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer")
+                        .HasColumnName("people_id");
 
                     b.Property<string>("imageUrl")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text")
+                        .HasColumnName("image_url");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_movie_images");
 
-                    b.HasIndex("MovieId");
+                    b.HasIndex("MovieId")
+                        .HasDatabaseName("ix_movie_images_movie_id");
 
-                    b.HasIndex("PeopleId");
+                    b.HasIndex("PeopleId")
+                        .HasDatabaseName("ix_movie_images_people_id");
 
-                    b.ToTable("MovieImages");
+                    b.ToTable("movie_images", (string)null);
                 });
 
             modelBuilder.Entity("MovieDataBase.Models.Movies", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ContentRating")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text")
+                        .HasColumnName("content_rating");
 
                     b.Property<int?>("CritiqueScore")
-                        .HasColumnType("int");
+                        .HasColumnType("integer")
+                        .HasColumnName("critique_score");
 
                     b.Property<DateOnly?>("DateReleased")
-                        .HasColumnType("date");
+                        .HasColumnType("date")
+                        .HasColumnName("date_released");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text")
+                        .HasColumnName("description");
 
                     b.Property<string>("Director")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text")
+                        .HasColumnName("director");
 
                     b.Property<int?>("Runtime")
-                        .HasColumnType("int");
+                        .HasColumnType("integer")
+                        .HasColumnName("runtime");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text")
+                        .HasColumnName("title");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_movies");
 
-                    b.ToTable("Movies");
+                    b.ToTable("movies", (string)null);
 
                     b.HasData(
                         new
@@ -309,26 +334,32 @@ namespace MovieDataBase.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Biography")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text")
+                        .HasColumnName("biography");
 
                     b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date_of_birth");
 
                     b.Property<DateTime?>("DateOfDeath")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date_of_death");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_people");
 
-                    b.ToTable("People");
+                    b.ToTable("people", (string)null);
 
                     b.HasData(
                         new
@@ -618,24 +649,31 @@ namespace MovieDataBase.Migrations
             modelBuilder.Entity("MovieDataBase.Models.PeopleRolesInMovies", b =>
                 {
                     b.Property<int>("MovieId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer")
+                        .HasColumnName("movie_id");
 
                     b.Property<int>("PeopleId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer")
+                        .HasColumnName("people_id");
 
                     b.Property<int>("RoleId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer")
+                        .HasColumnName("role_id");
 
                     b.Property<string>("CharacterName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text")
+                        .HasColumnName("character_name");
 
-                    b.HasKey("MovieId", "PeopleId", "RoleId");
+                    b.HasKey("MovieId", "PeopleId", "RoleId")
+                        .HasName("pk_people_roles_in_movies");
 
-                    b.HasIndex("PeopleId");
+                    b.HasIndex("PeopleId")
+                        .HasDatabaseName("ix_people_roles_in_movies_people_id");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex("RoleId")
+                        .HasDatabaseName("ix_people_roles_in_movies_role_id");
 
-                    b.ToTable("PeopleRolesInMovies");
+                    b.ToTable("people_roles_in_movies", (string)null);
 
                     b.HasData(
                         new
@@ -972,17 +1010,20 @@ namespace MovieDataBase.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_role");
 
-                    b.ToTable("Role");
+                    b.ToTable("role", (string)null);
 
                     b.HasData(
                         new
@@ -1013,13 +1054,15 @@ namespace MovieDataBase.Migrations
                         .WithMany("MovieGenres")
                         .HasForeignKey("GenreId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_movie_genres_genre_genre_id");
 
                     b.HasOne("MovieDataBase.Models.Movies", "Movie")
                         .WithMany("MovieGenres")
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_movie_genres_movies_movie_id");
 
                     b.Navigation("Genre");
 
@@ -1030,11 +1073,13 @@ namespace MovieDataBase.Migrations
                 {
                     b.HasOne("MovieDataBase.Models.Movies", "Movie")
                         .WithMany("Images")
-                        .HasForeignKey("MovieId");
+                        .HasForeignKey("MovieId")
+                        .HasConstraintName("fk_movie_images_movies_movie_id");
 
                     b.HasOne("MovieDataBase.Models.People", "People")
                         .WithMany("Images")
-                        .HasForeignKey("PeopleId");
+                        .HasForeignKey("PeopleId")
+                        .HasConstraintName("fk_movie_images_people_people_id");
 
                     b.Navigation("Movie");
 
@@ -1047,19 +1092,22 @@ namespace MovieDataBase.Migrations
                         .WithMany("PeopleRoles")
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_people_roles_in_movies_movies_movie_id");
 
                     b.HasOne("MovieDataBase.Models.People", "People")
                         .WithMany("MovieRoles")
                         .HasForeignKey("PeopleId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_people_roles_in_movies_people_people_id");
 
                     b.HasOne("MovieDataBase.Models.Role", "Role")
                         .WithMany("PeopleInMovies")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_people_roles_in_movies_role_role_id");
 
                     b.Navigation("Movie");
 

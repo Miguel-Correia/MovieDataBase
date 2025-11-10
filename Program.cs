@@ -4,9 +4,15 @@ using MovieDataBase.Data;
 using Minio;
 using MovieDataBase.Services;
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
+
 var builder = WebApplication.CreateBuilder(args);
+
+
 builder.Services.AddDbContext<MovieDataBaseContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("MovieDataBaseContext") ?? throw new InvalidOperationException("Connection string 'MovieDataBaseContext' not found.")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("MovieDataBaseContext") ?? throw new InvalidOperationException("Connection string 'MovieDataBaseContext' not found."))
+        .UseSnakeCaseNamingConvention());
 
 // Configurar MinIO Client
 builder.Services.AddMinio(configureClient => configureClient

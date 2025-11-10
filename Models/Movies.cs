@@ -9,7 +9,8 @@ namespace MovieDataBase.Models
         public string? Title { get; set; }
         public string? Director { get; set; }
 
-        [Display(Name ="Date Released")]
+        [Display(Name = "Date Released")]
+        [Column(TypeName = "date")] // Força tipo DATE no PostgreSQL
         public DateOnly? DateReleased { get; set; }
 
         [DataType(DataType.MultilineText)]
