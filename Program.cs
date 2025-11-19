@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddDbContext<MovieDataBaseContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("MovieDataBaseContext") ?? throw new InvalidOperationException("Connection string 'MovieDataBaseContext' not found."))
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found."))
         .UseSnakeCaseNamingConvention());
 
 // Configurar MinIO Client

@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MovieDataBase.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialPostgreSQL : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -54,8 +54,8 @@ namespace MovieDataBase.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     name = table.Column<string>(type: "text", nullable: false),
-                    date_of_birth = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    date_of_death = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    date_of_birth = table.Column<DateOnly>(type: "date", nullable: false),
+                    date_of_death = table.Column<DateOnly>(type: "date", nullable: true),
                     biography = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
@@ -189,46 +189,46 @@ namespace MovieDataBase.Migrations
                 columns: new[] { "id", "biography", "date_of_birth", "date_of_death", "name" },
                 values: new object[,]
                 {
-                    { 1, "British-American filmmaker known for his cerebral, often nonlinear storytelling. Notable works include The Dark Knight trilogy, Inception, and Interstellar.", new DateTime(1970, 7, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Christopher Nolan" },
-                    { 2, "American film director and screenwriter best known for his adaptations of Stephen King novels, including The Shawshank Redemption and The Green Mile.", new DateTime(1959, 1, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Frank Darabont" },
-                    { 3, "American filmmaker known for comedy films such as Superbad and Adventureland.", new DateTime(1964, 7, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Greg Mottola" },
-                    { 4, "American filmmaker known for Forrest Gump, Back to the Future trilogy, and pioneering motion-capture animation.", new DateTime(1951, 5, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Robert Zemeckis" },
-                    { 5, "Australian filmmaker best known for creating the Mad Max franchise and directing Happy Feet.", new DateTime(1945, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "George Miller" },
-                    { 6, "South Korean filmmaker known for Parasite (winner of 4 Oscars including Best Picture), Snowpiercer, and Memories of Murder.", new DateTime(1969, 9, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Bong Joon-ho" },
-                    { 7, "British actor known for his versatility and intense method acting. Famous for Batman trilogy, American Psycho, and The Machinist.", new DateTime(1974, 1, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Christian Bale" },
-                    { 8, "Australian actor who won a posthumous Oscar for his iconic portrayal of the Joker in The Dark Knight.", new DateTime(1979, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2008, 1, 22, 0, 0, 0, 0, DateTimeKind.Unspecified), "Heath Ledger" },
-                    { 9, "Legendary American actor and narrator with a distinctive voice. Academy Award winner known for roles in Shawshank Redemption and Million Dollar Baby.", new DateTime(1937, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Morgan Freeman" },
-                    { 10, "American actor, screenwriter, and director known for The Shawshank Redemption and Mystic River.", new DateTime(1958, 10, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Tim Robbins" },
-                    { 11, "American actor, comedian, and filmmaker. Two-time Oscar nominee known for Superbad, Moneyball, and The Wolf of Wall Street.", new DateTime(1983, 12, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Jonah Hill" },
-                    { 12, "Canadian actor known for his awkward, comedic roles in Superbad, Juno, and Scott Pilgrim vs. the World.", new DateTime(1988, 6, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Michael Cera" },
-                    { 13, "Oscar-winning American actor and environmental activist. Known for Titanic, Inception, The Revenant, and collaborations with Scorsese.", new DateTime(1974, 11, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Leonardo DiCaprio" },
-                    { 14, "British actor known for intense physical transformations. Famous for Mad Max: Fury Road, The Dark Knight Rises, and Venom.", new DateTime(1977, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Tom Hardy" },
-                    { 15, "Canadian actor known for Juno, Inception, and The Umbrella Academy. Now known as Elliot Page.", new DateTime(1987, 2, 21, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Ellen Page" },
-                    { 16, "Two-time Oscar winner and one of Hollywood's most beloved actors. Known for Forrest Gump, Saving Private Ryan, and Cast Away.", new DateTime(1956, 7, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Tom Hanks" },
-                    { 17, "South African-American actress and producer. Oscar winner known for Monster, Mad Max: Fury Road, and Atomic Blonde.", new DateTime(1975, 8, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Charlize Theron" },
-                    { 18, "Oscar-winning American actor known for Dallas Buyers Club, Interstellar, and True Detective.", new DateTime(1969, 11, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Matthew McConaughey" },
-                    { 19, "Oscar-winning American actress known for The Devil Wears Prada, Les Misérables, and Interstellar.", new DateTime(1982, 11, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Anne Hathaway" },
-                    { 20, "South Korean actor and Bong Joon-ho's frequent collaborator. Known for Parasite, Memories of Murder, and The Host.", new DateTime(1967, 1, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Song Kang-ho" },
-                    { 21, "British-American screenwriter and producer, brother of Christopher Nolan. Co-wrote The Dark Knight trilogy, Interstellar, and created Westworld.", new DateTime(1976, 6, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Jonathan Nolan" },
-                    { 22, "American screenwriter, film director and comic book writer. Known for writing Blade trilogy and The Dark Knight trilogy.", new DateTime(1965, 12, 22, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "David Goyer" },
-                    { 23, "American author known as the 'King of Horror'. Wrote the novella 'Rita Hayworth and Shawshank Redemption' which inspired the film.", new DateTime(1947, 9, 21, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Stephen King" },
-                    { 24, "Canadian-American actor, comedian, and writer. Co-wrote Superbad with Evan Goldberg based on their teenage experiences.", new DateTime(1982, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Seth Rogen" },
-                    { 25, "Canadian screenwriter and producer. Frequent collaborator with Seth Rogen on films like Superbad and Pineapple Express.", new DateTime(1982, 9, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Evan Goldberg" },
-                    { 26, "American screenwriter. Academy Award winner for Forrest Gump. Also wrote Munich, The Curious Case of Benjamin Button, and Dune.", new DateTime(1945, 3, 22, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Eric Roth" },
-                    { 27, "American novelist and non-fiction writer. Wrote the novel 'Forrest Gump' which was adapted into the Oscar-winning film.", new DateTime(1943, 3, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2020, 9, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), "Winston Groom" },
-                    { 28, "British artist and designer. Co-wrote Mad Max: Fury Road and designed much of its distinctive visual style.", new DateTime(1957, 3, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Brendan McCarthy" },
-                    { 29, "South Korean screenwriter. Co-wrote Parasite with Bong Joon-ho, winning the Academy Award for Best Original Screenplay.", new DateTime(1989, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Han Jin-won" },
-                    { 30, "British film producer and wife of Christopher Nolan. Produced all of Nolan's films including The Dark Knight trilogy, Inception, and Interstellar.", new DateTime(1971, 12, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Emma Thomas" },
-                    { 31, "American film producer. Produced The Dark Knight trilogy, Man of Steel, and numerous other blockbusters.", new DateTime(1949, 8, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Charles Roven" },
-                    { 32, "American film producer. Worked on The Shawshank Redemption and The Majestic with Frank Darabont.", new DateTime(1952, 6, 8, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Niki Marvin" },
-                    { 33, "American producer, director, and comedian. Produced Superbad and numerous other comedy hits like Knocked Up and The 40-Year-Old Virgin.", new DateTime(1967, 12, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Judd Apatow" },
-                    { 34, "American film producer. Produced Superbad and other Judd Apatow productions.", new DateTime(1968, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Shaun McKittrick" },
-                    { 35, "American film producer. Won Academy Award for producing Forrest Gump. Also produced The Devil Wears Prada.", new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Wendy Finerman" },
-                    { 36, "American film producer and businessman. Co-produced Forrest Gump. Also co-owner of the New York Giants NFL team.", new DateTime(1949, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Steve Tisch" },
-                    { 37, "Australian film producer. Long-time collaborator with George Miller on Mad Max films and Babe.", new DateTime(1952, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Doug Mitchell" },
-                    { 38, "American film producer. Produced Interstellar, Contact, and Sleepless in Seattle.", new DateTime(1950, 4, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Lynda Obst" },
-                    { 39, "South Korean film producer. Produced Parasite and The Handmaiden. President of Barunson E&A.", new DateTime(1968, 3, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Kwak Sin-ae" },
-                    { 40, "South Korean film producer. Co-produced Parasite with Kwak Sin-ae.", new DateTime(1975, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Jang Young-hwan" }
+                    { 1, "British-American filmmaker known for his cerebral, often nonlinear storytelling. Notable works include The Dark Knight trilogy, Inception, and Interstellar.", new DateOnly(1970, 7, 30), null, "Christopher Nolan" },
+                    { 2, "American film director and screenwriter best known for his adaptations of Stephen King novels, including The Shawshank Redemption and The Green Mile.", new DateOnly(1959, 1, 28), null, "Frank Darabont" },
+                    { 3, "American filmmaker known for comedy films such as Superbad and Adventureland.", new DateOnly(1964, 7, 11), null, "Greg Mottola" },
+                    { 4, "American filmmaker known for Forrest Gump, Back to the Future trilogy, and pioneering motion-capture animation.", new DateOnly(1951, 5, 14), null, "Robert Zemeckis" },
+                    { 5, "Australian filmmaker best known for creating the Mad Max franchise and directing Happy Feet.", new DateOnly(1945, 3, 3), null, "George Miller" },
+                    { 6, "South Korean filmmaker known for Parasite (winner of 4 Oscars including Best Picture), Snowpiercer, and Memories of Murder.", new DateOnly(1969, 9, 14), null, "Bong Joon-ho" },
+                    { 7, "British actor known for his versatility and intense method acting. Famous for Batman trilogy, American Psycho, and The Machinist.", new DateOnly(1974, 1, 30), null, "Christian Bale" },
+                    { 8, "Australian actor who won a posthumous Oscar for his iconic portrayal of the Joker in The Dark Knight.", new DateOnly(1979, 4, 4), new DateOnly(2008, 1, 22), "Heath Ledger" },
+                    { 9, "Legendary American actor and narrator with a distinctive voice. Academy Award winner known for roles in Shawshank Redemption and Million Dollar Baby.", new DateOnly(1937, 6, 1), null, "Morgan Freeman" },
+                    { 10, "American actor, screenwriter, and director known for The Shawshank Redemption and Mystic River.", new DateOnly(1958, 10, 16), null, "Tim Robbins" },
+                    { 11, "American actor, comedian, and filmmaker. Two-time Oscar nominee known for Superbad, Moneyball, and The Wolf of Wall Street.", new DateOnly(1983, 12, 20), null, "Jonah Hill" },
+                    { 12, "Canadian actor known for his awkward, comedic roles in Superbad, Juno, and Scott Pilgrim vs. the World.", new DateOnly(1988, 6, 7), null, "Michael Cera" },
+                    { 13, "Oscar-winning American actor and environmental activist. Known for Titanic, Inception, The Revenant, and collaborations with Scorsese.", new DateOnly(1974, 11, 11), null, "Leonardo DiCaprio" },
+                    { 14, "British actor known for intense physical transformations. Famous for Mad Max: Fury Road, The Dark Knight Rises, and Venom.", new DateOnly(1977, 9, 15), null, "Tom Hardy" },
+                    { 15, "Canadian actor known for Juno, Inception, and The Umbrella Academy. Now known as Elliot Page.", new DateOnly(1987, 2, 21), null, "Ellen Page" },
+                    { 16, "Two-time Oscar winner and one of Hollywood's most beloved actors. Known for Forrest Gump, Saving Private Ryan, and Cast Away.", new DateOnly(1956, 7, 9), null, "Tom Hanks" },
+                    { 17, "South African-American actress and producer. Oscar winner known for Monster, Mad Max: Fury Road, and Atomic Blonde.", new DateOnly(1975, 8, 7), null, "Charlize Theron" },
+                    { 18, "Oscar-winning American actor known for Dallas Buyers Club, Interstellar, and True Detective.", new DateOnly(1969, 11, 4), null, "Matthew McConaughey" },
+                    { 19, "Oscar-winning American actress known for The Devil Wears Prada, Les Misérables, and Interstellar.", new DateOnly(1982, 11, 12), null, "Anne Hathaway" },
+                    { 20, "South Korean actor and Bong Joon-ho's frequent collaborator. Known for Parasite, Memories of Murder, and The Host.", new DateOnly(1967, 1, 17), null, "Song Kang-ho" },
+                    { 21, "British-American screenwriter and producer, brother of Christopher Nolan. Co-wrote The Dark Knight trilogy, Interstellar, and created Westworld.", new DateOnly(1976, 6, 6), null, "Jonathan Nolan" },
+                    { 22, "American screenwriter, film director and comic book writer. Known for writing Blade trilogy and The Dark Knight trilogy.", new DateOnly(1965, 12, 22), null, "David Goyer" },
+                    { 23, "American author known as the 'King of Horror'. Wrote the novella 'Rita Hayworth and Shawshank Redemption' which inspired the film.", new DateOnly(1947, 9, 21), null, "Stephen King" },
+                    { 24, "Canadian-American actor, comedian, and writer. Co-wrote Superbad with Evan Goldberg based on their teenage experiences.", new DateOnly(1982, 4, 15), null, "Seth Rogen" },
+                    { 25, "Canadian screenwriter and producer. Frequent collaborator with Seth Rogen on films like Superbad and Pineapple Express.", new DateOnly(1982, 9, 11), null, "Evan Goldberg" },
+                    { 26, "American screenwriter. Academy Award winner for Forrest Gump. Also wrote Munich, The Curious Case of Benjamin Button, and Dune.", new DateOnly(1945, 3, 22), null, "Eric Roth" },
+                    { 27, "American novelist and non-fiction writer. Wrote the novel 'Forrest Gump' which was adapted into the Oscar-winning film.", new DateOnly(1943, 3, 23), new DateOnly(2020, 9, 17), "Winston Groom" },
+                    { 28, "British artist and designer. Co-wrote Mad Max: Fury Road and designed much of its distinctive visual style.", new DateOnly(1957, 3, 28), null, "Brendan McCarthy" },
+                    { 29, "South Korean screenwriter. Co-wrote Parasite with Bong Joon-ho, winning the Academy Award for Best Original Screenplay.", new DateOnly(1989, 1, 1), null, "Han Jin-won" },
+                    { 30, "British film producer and wife of Christopher Nolan. Produced all of Nolan's films including The Dark Knight trilogy, Inception, and Interstellar.", new DateOnly(1971, 12, 9), null, "Emma Thomas" },
+                    { 31, "American film producer. Produced The Dark Knight trilogy, Man of Steel, and numerous other blockbusters.", new DateOnly(1949, 8, 2), null, "Charles Roven" },
+                    { 32, "American film producer. Worked on The Shawshank Redemption and The Majestic with Frank Darabont.", new DateOnly(1952, 6, 8), null, "Niki Marvin" },
+                    { 33, "American producer, director, and comedian. Produced Superbad and numerous other comedy hits like Knocked Up and The 40-Year-Old Virgin.", new DateOnly(1967, 12, 6), null, "Judd Apatow" },
+                    { 34, "American film producer. Produced Superbad and other Judd Apatow productions.", new DateOnly(1968, 5, 15), null, "Shaun McKittrick" },
+                    { 35, "American film producer. Won Academy Award for producing Forrest Gump. Also produced The Devil Wears Prada.", new DateOnly(1960, 1, 1), null, "Wendy Finerman" },
+                    { 36, "American film producer and businessman. Co-produced Forrest Gump. Also co-owner of the New York Giants NFL team.", new DateOnly(1949, 2, 14), null, "Steve Tisch" },
+                    { 37, "Australian film producer. Long-time collaborator with George Miller on Mad Max films and Babe.", new DateOnly(1952, 10, 15), null, "Doug Mitchell" },
+                    { 38, "American film producer. Produced Interstellar, Contact, and Sleepless in Seattle.", new DateOnly(1950, 4, 14), null, "Lynda Obst" },
+                    { 39, "South Korean film producer. Produced Parasite and The Handmaiden. President of Barunson E&A.", new DateOnly(1968, 3, 12), null, "Kwak Sin-ae" },
+                    { 40, "South Korean film producer. Co-produced Parasite with Kwak Sin-ae.", new DateOnly(1975, 5, 20), null, "Jang Young-hwan" }
                 });
 
             migrationBuilder.InsertData(
