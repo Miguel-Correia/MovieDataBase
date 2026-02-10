@@ -14,9 +14,9 @@ namespace MovieDataBase.Controllers
     public class PeopleController : Controller
     {
         private readonly MovieDataBaseContext _context;
-        private readonly IStorageService _storageService;
+        private readonly SupabaseStorageService _storageService;
 
-        public PeopleController(MovieDataBaseContext context, IStorageService storageService)
+        public PeopleController(MovieDataBaseContext context, SupabaseStorageService storageService)
         {
             _context = context;
             _storageService = storageService;
@@ -61,7 +61,7 @@ namespace MovieDataBase.Controllers
                         foreach (var image in movie.Images)
                         {
                             if (image.imageUrl == null) continue;
-                            image.FullUrl = _storageService.GetFullUrl(image.imageUrl);
+                            image.FullUrl = _storageService.GetPublicUrl(image.imageUrl);
                         }
                     }
                 }
@@ -72,7 +72,7 @@ namespace MovieDataBase.Controllers
                 foreach (var image in people.Images)
                 {
                     if (image.imageUrl == null) continue;
-                    image.FullUrl = _storageService.GetFullUrl(image.imageUrl);
+                    image.FullUrl = _storageService.GetPublicUrl(image.imageUrl);
                 }
             }
 

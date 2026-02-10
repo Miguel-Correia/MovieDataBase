@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MovieDataBase.Data;
 using Minio;
 using MovieDataBase.Services;
+using System.Net.Http.Headers;
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
@@ -14,19 +15,17 @@ builder.Services.AddDbContext<MovieDataBaseContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found."))
         .UseSnakeCaseNamingConvention());
 
-// Configurar MinIO Client
-builder.Services.AddMinio(configureClient => configureClient
-    .WithEndpoint(builder.Configuration["MinIO:Endpoint"] ?? "localhost:9002")
-    .WithCredentials(
-        builder.Configuration["MinIO:AccessKey"] ?? "minioadmin",
-        builder.Configuration["MinIO:SecretKey"] ?? "minioadmin123")
-    .WithSSL(false)); // true se usar HTTPS
 
-
-
-// Registrar o serviço de storage
-// Para MinIO (desenvolvimento):
-builder.Services.AddScoped<IStorageService, MinioStorageService>();
+// Registrar typed HttpClient para SupabaseStorageService (configura base address e headers)
+builder.Services.AddHttpClient<SupabaseStorageService>((sp, client) =>
+{
+    var configuration = sp.GetRequiredService<IConfiguration>();
+    var url = configuration["Supabase:Url"] ?? throw new InvalidOperationException("Supabase:Url não configurado");
+    var key = configuration["Supabase:Key"] ?? throw new InvalidOperationException("Supabase:Key não configurado");
+    client.BaseAddress = new Uri(url.TrimEnd('/'));
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", key);
+    client.DefaultRequestHeaders.Add("apikey", key);
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

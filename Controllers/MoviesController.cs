@@ -19,9 +19,9 @@ namespace MovieDataBase.Controllers
     public class MoviesController : Controller
     {
         private readonly MovieDataBaseContext _context;
-        private readonly IStorageService _storageService;
+        private readonly SupabaseStorageService _storageService;
 
-        public MoviesController(MovieDataBaseContext context, IStorageService storageService)
+        public MoviesController(MovieDataBaseContext context, SupabaseStorageService storageService)
         {
             _context = context;
             _storageService = storageService;
@@ -89,7 +89,7 @@ namespace MovieDataBase.Controllers
                     {
                         if (!string.IsNullOrEmpty(image.imageUrl))
                         {
-                            image.FullUrl = _storageService.GetFullUrl(image.imageUrl);
+                            image.FullUrl = await _storageService.GetSignedUrlAsync(image.imageUrl, 60);
                         }
                     }
                 }
@@ -129,7 +129,7 @@ namespace MovieDataBase.Controllers
                 foreach (var image in movie.Images)
                 {
                     if (image.imageUrl == null) continue;
-                    image.FullUrl = _storageService.GetFullUrl(image.imageUrl);
+                    image.FullUrl = _storageService.GetPublicUrl(image.imageUrl);
                 }
             }
 
@@ -144,7 +144,7 @@ namespace MovieDataBase.Controllers
                         foreach( var image in people.People.Images)
                         {
                             if (image.imageUrl == null) continue;
-                                image.FullUrl = _storageService.GetFullUrl(image.imageUrl);
+                                image.FullUrl = _storageService.GetPublicUrl(image.imageUrl);
                         }
                     }
                 }
@@ -464,7 +464,7 @@ namespace MovieDataBase.Controllers
             }
             
             // Converte o caminho relativo em URL completo
-            var fullUrl = _storageService.GetFullUrl(image.imageUrl);
+            var fullUrl = _storageService.GetPublicUrl(image.imageUrl);
 
             return Ok(new { url = fullUrl });
         }
